@@ -1,0 +1,17 @@
+<div class="px-4 pt-5 my-5 text-center border-bottom">
+  <h1 class="display-4 fw-bold">Meet Our Experienced Doctors</h1>
+    <div class="col-lg-6 mx-auto">
+    <p class="lead mb-4">Our team of dedicated and experienced doctors is committed to providing exceptional healthcare services. With expertise in various medical specialties, our doctors prioritize patient care, ensuring personalized and compassionate treatment. Trust in the expertise of our medical professionals to guide you on your journey to optimal health.</p>
+      <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
+      <% unless doctor_signed_in? || patient_signed_in? %>
+      <%= link_to "I am User", patient_session_path, class: "login-button type=button" %>
+      <%= link_to "I am Doctor", doctor_session_path, class: "login-button type=button" %>
+    <% end %>
+      </div>
+    </div>
+    <div class="overflow-hidden" style="max-height: 30vh;">
+      <div class="container px-5">
+        <%# <%= image_tag('foto_htree.jpg', alt: 'Description of the image') %> %>
+      </div>
+    </div>
+  </div>
