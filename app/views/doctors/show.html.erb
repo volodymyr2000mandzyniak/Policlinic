@@ -2,7 +2,6 @@
 <div class="profile-container">
   <h2>Ваш профіль</h2>
 
-  <!-- app/views/doctors/show.html.erb -->
 <% if doctor_signed_in? && current_doctor == @doctor %>
   <% if @doctor.approved? %>
     <div class="alert alert-success mb-4">
