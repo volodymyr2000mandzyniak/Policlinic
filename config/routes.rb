@@ -4,6 +4,6 @@ Rails.application.routes.draw do
   devise_for :doctors
   devise_for :patients
 
-  resources :patients, only: [ :show ], controller: "patients"
-  resources :doctors, only: [ :show ], controller: "doctors"
+  resources :patients, only: [ :index, :show ], controller: "patients"
+  resources :doctors,  only: [ :index, :show ], controller: "doctors"
 end

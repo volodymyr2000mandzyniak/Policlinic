@@ -8,11 +8,19 @@ class Doctor < ApplicationRecord
 
   validates :phone, presence: true, uniqueness: true
 
-  def email_required?
-    false
-  end
+  # def email_required?
+  #   false
+  # end
 
-  def email_changed?
-    false
+  # def email_changed?
+  #   false
+  # end
+  
+  def email_required?; false; end
+  def email_changed?; false; end
+
+
+    def full_name
+    [first_name, last_name].compact.join(' ')
   end
 end

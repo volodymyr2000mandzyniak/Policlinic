@@ -12,6 +12,14 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:account_update, keys: params)
   end
 
+  def after_sign_in_path_for(resource)
+    path_for(resource)
+  end
+
+  def after_sign_up_path_for(resource)
+    path_for(resource)
+  end
+
   private
 
   def permitted_devise_params
@@ -30,5 +38,12 @@ class ApplicationController < ActionController::Base
       :email, :first_name, :last_name, :date_of_birth, :address,
       :phone, :password, :password_confirmation
     ]
+  end
+
+    def path_for(resource)
+    return doctor_path(resource) if resource.is_a?(Doctor)
+    return patient_path(resource) if resource.is_a?(Patient)
+
+    root_path
   end
 end

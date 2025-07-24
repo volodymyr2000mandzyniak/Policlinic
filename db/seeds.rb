@@ -24,3 +24,35 @@ categories.each do |title|
 end
 
 puts "✅ Categories seeded successfully!"
+
+
+require 'faker'
+
+Doctor.destroy_all
+
+puts "Створюємо лікарів для кожної категорії..."
+
+Category.find_each do |category|
+  rand(2..6).times do
+    first_name = Faker::Name.first_name
+    last_name = Faker::Name.last_name
+    phone = Faker::PhoneNumber.unique.cell_phone_in_e164
+    email = Faker::Internet.unique.email(name: "#{first_name}.#{last_name}")
+
+    Doctor.create!(
+      email: email,
+      phone: phone,
+      password: "password123",
+      password_confirmation: "password123",
+      first_name: first_name,
+      last_name: last_name,
+      date_of_birth: Faker::Date.birthday(min_age: 30, max_age: 60),
+      address: Faker::Address.full_address,
+      category_id: category.id
+    )
+  end
+
+  puts "✔ Створено лікарів для категорії: #{category.title}"
+end
+
+puts "✅ Готово!"

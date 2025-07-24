@@ -1,0 +1,49 @@
+<h1 class="mb-5 text-center">Our Doctors</h1>
+
+<div class="row">
+  <!-- Карточки лікарів (ліва колонка) -->
+  <div class="col-md-9">
+    <% @doctors.each do |doctor| %>
+      <div class="card mb-4 shadow-sm">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <%= image_tag("https://randomuser.me/api/portraits/men/#{rand(1..80)}.jpg",
+                          class: "img-fluid h-100 w-100 object-fit-cover rounded-start") %>
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title mb-2">
+                <%= link_to doctor.full_name, doctor_path(doctor), class: "text-decoration-none text-dark" %>
+              </h5>
+              <p class="card-text mb-1"><strong>Category:</strong> <%= doctor.category&.title %></p>
+              <p class="card-text mb-1"><strong>Phone:</strong> <%= doctor.phone %></p>
+              <p class="card-text mb-1"><strong>Email:</strong> <%= doctor.email %></p>
+              <p class="card-text"><strong>Address:</strong> <%= doctor.address %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Блок категорій (права колонка) -->
+  <div class="col-md-3 mb-4">
+    <div class="card shadow-sm">
+      <div class="card-header bg-primary text-white">
+        <strong>Categories</strong>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item d-flex justify-content-between align-items-center <%= 'active' unless params[:category_id].present? %>">
+          <%= link_to 'All Categories', doctors_path, class: 'text-decoration-none' %>
+          <span class="badge bg-secondary rounded-pill"><%= Doctor.count %></span>
+        </li>
+        <% @categories.each do |category| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center <%= 'active' if params[:category_id].to_i == category.id %>">
+            <%= link_to category.title, doctors_path(category_id: category.id), class: 'text-decoration-none' %>
+            <span class="badge bg-secondary rounded-pill"><%= Doctor.where(category_id: category.id).count %></span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>
