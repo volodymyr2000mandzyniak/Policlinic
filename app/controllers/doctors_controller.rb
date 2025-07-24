@@ -10,5 +10,8 @@ class DoctorsController < ApplicationController
 
   def show
     @doctor = Doctor.find(params[:id])
+    unless @doctor.approved? || current_doctor == @doctor
+      redirect_to root_path, alert: "Профіль лікаря ще не підтверджено."
+    end
   end
 end
