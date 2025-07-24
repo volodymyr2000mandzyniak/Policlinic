@@ -1,0 +1,18 @@
+<%# app/views/appointments/edit.html.erb %>
+<div class="container mt-5">
+  <h2 class="mb-4">Рекомендація для пацієнта</h2>
+
+  <div class="mb-3">
+    <strong>Пацієнт:</strong> <%= @appointment.patient.first_name  %>
+  </div>
+
+  <%= form_with model: @appointment, url: appointment_path(@appointment), local: true do |f| %>
+    <div class="mb-3">
+      <%= f.label :recommendation, "Ваші рекомендації" %>
+      <%= f.text_area :recommendation, class: "form-control", rows: 6 %>
+    </div>
+
+    <%= f.submit "Зберегти рекомендацію", class: "btn btn-primary" %>
+    <%= link_to "Назад", appointments_path, class: "btn btn-secondary ms-2" %>
+  <% end %>
+</div>
