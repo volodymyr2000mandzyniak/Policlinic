@@ -1,12 +1,9 @@
 Rails.application.routes.draw do
-  
   root "first_page#index"
-  
+
   devise_for :doctors
   devise_for :patients
-  get "up" => "rails/health#show", as: :rails_health_check
 
-  get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-  get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-
+  resources :patients, only: [ :show ], controller: "patients"
+  resources :doctors, only: [ :show ], controller: "doctors"
 end

@@ -1,1 +1,44 @@
 @import "bootstrap";
+
+
+.registration-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-control {
+  height: calc(2.5em + .75rem + 2px);
+}
+
+.btn-block {
+  padding: 10px;
+  font-size: 1.1rem;
+}
+
+.shared-links {
+  margin-top: 20px;
+  text-align: center;
+}
+
+label.required:after {
+  content: " *";
+  color: red;
+}
+
+
+
+
+
+
+
+
+
+

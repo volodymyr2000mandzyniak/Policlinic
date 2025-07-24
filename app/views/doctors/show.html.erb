@@ -1,0 +1,100 @@
+<%# app/views/doctors/show.html.erb %>
+<div class="profile-container">
+  <h2>Ваш профіль</h2>
+
+  <div class="profile-info">
+    <div class="info-item">
+      <strong>Ім'я:</strong>
+      <span><%= @doctor.first_name %></span>
+    </div>
+
+    <div class="info-item">
+      <strong>Прізвище:</strong>
+      <span><%= @doctor.last_name %></span>
+    </div>
+
+    <div class="info-item">
+      <strong>Email:</strong>
+      <span><%= @doctor.email %></span>
+    </div>
+
+    <div class="info-item">
+      <strong>Телефон:</strong>
+      <span><%= @doctor.phone %></span>
+    </div>
+
+    <div class="info-item">
+      <strong>Дата народження:</strong>
+      <span><%= @doctor.date_of_birth %></span>
+    </div>
+
+    <div class="info-item">
+      <strong>Адреса:</strong>
+      <span><%= @doctor.address %></span>
+    </div>
+
+    <% if @doctor.category %>
+      <div class="info-item">
+        <strong>Спеціальність:</strong>
+        <span><%= @doctor.category.title %></span>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="profile-actions">
+    <%= link_to "Редагувати профіль", edit_doctor_registration_path, class: "btn btn-edit" %>
+    <%= button_to "Вийти", destroy_doctor_session_path, method: :delete, class: "btn btn-logout" %>
+  </div>
+</div>
+
+<style>
+.profile-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.profile-info {
+  margin-bottom: 2rem;
+}
+
+.info-item {
+  display: flex;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.info-item strong {
+  width: 150px;
+  color: #555;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.btn-edit {
+  background: #4CAF50;
+  color: white;
+  border: 1px solid #4CAF50;
+}
+
+.btn-logout {
+  background: #f44336;
+  color: white;
+  border: 1px solid #f44336;
+  cursor: pointer;
+}
+</style>

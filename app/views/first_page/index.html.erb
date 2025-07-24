@@ -4,8 +4,9 @@
     <p class="lead mb-4">Our team of dedicated and experienced doctors is committed to providing exceptional healthcare services. With expertise in various medical specialties, our doctors prioritize patient care, ensuring personalized and compassionate treatment. Trust in the expertise of our medical professionals to guide you on your journey to optimal health.</p>
       <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
       <% unless doctor_signed_in? || patient_signed_in? %>
-      <%= link_to "I am User", patient_session_path, class: "login-button type=button" %>
-      <%= link_to "I am Doctor", doctor_session_path, class: "login-button type=button" %>
+
+      <%= link_to "Я пацієнт", new_patient_session_path, class: "btn btn-primary" %>
+      <%= link_to "Я лікар", new_doctor_session_path, class: "btn btn-secondary" %>
     <% end %>
       </div>
     </div>
