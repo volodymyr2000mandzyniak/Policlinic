@@ -1,0 +1,17 @@
+<%# app/views/appointments/show.html.erb %>
+<div class="container mt-5">
+  <h2 class="mb-4">Деталі рекомендації</h2>
+
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Лікар: <%= @appointment.doctor.full_name %></h5>
+      <p class="card-text"><strong>Категорія:</strong> <%= @appointment.doctor.category&.title %></p>
+      <p class="card-text"><strong>Дата візиту:</strong> <%= l(@appointment.created_at, format: :long) %></p>
+      <hr>
+      <h6>Рекомендація лікаря:</h6>
+      <p><%= @appointment.recommendation.presence || "—" %></p>
+    </div>
+  </div>
+
+  <%= link_to "Назад до профілю", patient_path(current_patient), class: "btn btn-secondary mt-3" %>
+</div>

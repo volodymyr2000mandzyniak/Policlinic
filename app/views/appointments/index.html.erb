@@ -1,0 +1,27 @@
+<h1>Ваші записи</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Пацієнт</th>
+      <th>Статус</th>
+      <th>Рекомендація</th>
+      <th>Дія</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @appointments.each do |appt| %>
+      <tr>
+        <td><%= appt.patient.first_name %></td>
+        <td><%= appt.status %></td>
+        <td><%= appt.recommendation.presence || "—" %></td>
+        <td>
+          <%= form_with url: appointment_path(appt), method: :put, local: true do |f| %>
+            <%= f.text_area :recommendation, placeholder: "Ваша рекомендація..." %>
+            <%= f.submit "Надіслати", class: "btn btn-sm btn-success mt-2" %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -37,12 +37,18 @@
 
 class Doctor < ApplicationRecord
   devise :database_authenticatable, :registerable,
-        :recoverable, :rememberable, :validatable,
-        authentication_keys: [:phone]
+        :recoverable, :rememberable, :validatable, authentication_keys: [:phone]
 
   belongs_to :category
+  has_many :appointments
+  has_many :patients, through: :appointments
 
   validates :phone, presence: true, uniqueness: true
+
+  # Максимум 10 відкритих записів
+  def can_accept_new_appointment?
+    appointments.where(status: 'open').count < 10
+  end
 
   scope :approved, -> { where(approved: true) }
 

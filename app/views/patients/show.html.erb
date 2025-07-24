@@ -1,111 +1,80 @@
-<%# app/views/patients/show.html.erb %>
-<div class="patient-profile">
-  <h2>Ваш профіль пацієнта</h2>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
 
-  <div class="profile-info">
-    <div class="info-item">
-      <strong>Ім'я:</strong>
-      <span><%= @patient.first_name %></span>
+      <div class="card mb-4 shadow-sm">
+        <div class="row g-0">
+          <div class="col-md-4 d-flex align-items-center justify-content-center bg-light p-3">
+            <%= image_tag("https://randomuser.me/api/portraits/men/#{rand(1..80)}.jpg", class: "img-fluid rounded-circle", alt: "Patient Avatar", style: "width: 150px; height: 150px; object-fit: cover;") %>
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h4 class="card-title mb-3">👤 Ваш профіль</h4>
+
+              <p><strong>Ім'я:</strong> <%= @patient.first_name %></p>
+              <p><strong>Прізвище:</strong> <%= @patient.last_name %></p>
+              <p><strong>Email:</strong> <%= @patient.email %></p>
+              <p><strong>Телефон:</strong> <%= @patient.phone %></p>
+              <p><strong>Дата народження:</strong> <%= @patient.date_of_birth.strftime("%d.%m.%Y") if @patient.date_of_birth %></p>
+              <p><strong>Адреса:</strong> <%= @patient.address.presence || "—" %></p>
+
+              <div class="mt-4 d-flex gap-2">
+                <%= link_to "✏️ Редагувати профіль", edit_patient_registration_path, class: "btn btn-outline-success btn-sm" %>
+                <%= button_to "🚪 Вийти", destroy_patient_session_path, method: :delete, class: "btn btn-outline-danger btn-sm" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h4 class="mb-3">📋 Ваші записи</h4>
+
+      <% if @appointments.any? %>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>👨‍⚕️ Лікар</th>
+                <th>📂 Категорія</th>
+                <th>📌 Статус</th>
+                <th>📝 Рекомендація</th>
+                <th>📅 Дата</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @appointments.each do |appt| %>
+                <tr>
+                  <td>
+                    <div class="d-flex flex-column">
+                      <strong><%= appt.doctor.full_name %></strong>
+                      <%= link_to "Перейти до лікаря", doctor_path(appt.doctor), class: "btn btn-sm btn-outline-primary mt-1" %>
+                    </div>
+                  </td>
+                  <td><%= appt.doctor.category&.title %></td>
+                  <td>
+                    <% if appt.status == "open" %>
+                      <span class="badge bg-warning text-dark">Очікує</span>
+                    <% else %>
+                      <span class="badge bg-success">Закрито</span>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% if appt.recommendation.present? %>
+                      <%= link_to "Переглянути", appointment_path(appt), class: "btn btn-sm btn-outline-primary" %>
+                    <% else %>
+                      —
+                    <% end %>
+                  </td>
+                  <td><%= l(appt.created_at, format: :short) %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <p class="text-muted">У вас поки що немає записів.</p>
+      <% end %>
+
     </div>
-
-    <div class="info-item">
-      <strong>Прізвище:</strong>
-      <span><%= @patient.last_name %></span>
-    </div>
-
-    <div class="info-item">
-      <strong>Email:</strong>
-      <span><%= @patient.email %></span>
-    </div>
-
-    <div class="info-item">
-      <strong>Телефон:</strong>
-      <span><%= @patient.phone %></span>
-    </div>
-
-    <div class="info-item">
-      <strong>Дата народження:</strong>
-      <span><%= @patient.date_of_birth.strftime("%d.%m.%Y") if @patient.date_of_birth %></span>
-    </div>
-
-    <div class="info-item">
-      <strong>Адреса:</strong>
-      <span><%= @patient.address %></span>
-    </div>
-  </div>
-
-  <div class="profile-actions">
-    <%= link_to "Редагувати профіль", edit_patient_registration_path, class: "btn btn-edit" %>
-    <%= button_to "Вийти", destroy_patient_session_path, method: :delete, class: "btn btn-logout" %>
   </div>
 </div>
-
-<style>
-.patient-profile {
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: #f8f9fa;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.profile-info {
-  margin-bottom: 2rem;
-}
-
-.info-item {
-  display: flex;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #eee;
-}
-
-.info-item strong {
-  width: 150px;
-  color: #555;
-}
-
-.profile-actions {
-  display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-.btn {
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  text-decoration: none;
-  font-weight: 500;
-  text-align: center;
-}
-
-.btn-edit {
-  background: #4CAF50;
-  color: white;
-  border: 1px solid #4CAF50;
-}
-
-.btn-logout {
-  background: #f44336;
-  color: white;
-  border: 1px solid #f44336;
-  cursor: pointer;
-}
-
-@media (max-width: 600px) {
-  .patient-profile {
-    margin: 1rem;
-    padding: 1rem;
-  }
-  
-  .info-item {
-    flex-direction: column;
-  }
-  
-  .info-item strong {
-    width: auto;
-    margin-bottom: 0.3rem;
-  }
-}
-</style>

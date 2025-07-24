@@ -3,5 +3,6 @@ class PatientsController < ApplicationController
 
   def show
     @patient = current_patient
+    @appointments = @patient.appointments.includes(:doctor).order(created_at: :desc)
   end
 end
