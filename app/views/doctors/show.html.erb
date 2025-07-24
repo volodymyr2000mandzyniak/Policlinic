@@ -2,6 +2,20 @@
 <div class="profile-container">
   <h2>Ваш профіль</h2>
 
+  <!-- app/views/doctors/show.html.erb -->
+<% if doctor_signed_in? && current_doctor == @doctor %>
+  <% if @doctor.approved? %>
+    <div class="alert alert-success mb-4">
+      ✅ Ваш профіль підтверджено адміністрацією
+    </div>
+  <% else %>
+    <div class="alert alert-warning mb-4">
+      🕒 Ваш профіль ще не підтверджено. Адміністрація розглядає вашу заявку.
+    </div>
+  <% end %>
+<% end %>
+
+
   <div class="profile-info">
     <div class="info-item">
       <strong>Ім'я:</strong>
