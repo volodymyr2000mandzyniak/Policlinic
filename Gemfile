@@ -20,6 +20,7 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 gem "bootsnap", require: false
 
+gem 'activeadmin'
 
 
 gem 'faker'
