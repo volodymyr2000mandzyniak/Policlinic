@@ -4,26 +4,31 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  # Налаштування дозволених параметрів
   def configure_permitted_parameters
-    if resource_class == Doctor
-      devise_parameter_sanitizer.permit(:sign_up, keys: doctor_params)
-      devise_parameter_sanitizer.permit(:account_update, keys: doctor_params)
-    elsif resource_class == Patient
-      devise_parameter_sanitizer.permit(:sign_up, keys: patient_params)
-      devise_parameter_sanitizer.permit(:account_update, keys: patient_params)
-    end
+    params = permitted_devise_params
+    return unless params.present?
+
+    devise_parameter_sanitizer.permit(:sign_up, keys: params)
+    devise_parameter_sanitizer.permit(:account_update, keys: params)
   end
 
   private
 
-  def doctor_params
-    [:email, :first_name, :last_name, :date_of_birth, :address, :phone, :category_id, 
-    :password, :password_confirmation]
+  def permitted_devise_params
+    case resource_class.to_s
+    when 'Doctor'
+      base_params + [:category_id]
+    when 'Patient'
+      base_params
+    else
+      nil
+    end
   end
 
-  def patient_params
-    [:email, :first_name, :last_name, :date_of_birth, :address, :phone, 
-    :password, :password_confirmation]
+  def base_params
+    [
+      :email, :first_name, :last_name, :date_of_birth, :address,
+      :phone, :password, :password_confirmation
+    ]
   end
 end
