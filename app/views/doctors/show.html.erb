@@ -1,6 +1,9 @@
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-8">
+<% if patient_signed_in? %>
+  <%= button_to "Записатися на прийом", appointments_path(doctor_id: @doctor.id), method: :post, class: "btn btn-success" %>
+<% end %>
 
       <div class="card shadow-sm mb-4">
         <div class="row g-0">
@@ -47,6 +50,17 @@
           </div>
         </div>
       </div>
+
+      <% if doctor_signed_in? && current_doctor == @doctor %>
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="card-title mb-3">🔎 Перегляд записів</h5>
+      <%= link_to "📂 Відкриті записи", appointments_path, class: "btn btn-outline-primary mb-2 me-2" %>
+      <%= link_to "✅ Закриті записи", closed_appointments_path, class: "btn btn-outline-success mb-2" %>
+    </div>
+  </div>
+<% end %>
+
 
       <% if doctor_signed_in? && current_doctor == @doctor %>
         <div class="card shadow-sm">

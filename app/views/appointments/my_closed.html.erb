@@ -1,0 +1,35 @@
+<h3 class="mb-4">✅ Ваші закриті записи</h3>
+
+<% if @appointments.any? %>
+  <table class="table table-striped table-bordered align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>👨‍⚕️ Лікар</th>
+        <th>📂 Категорія</th>
+        <th>📅 Дата запису</th>
+        <th>📝 Рекомендація</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @appointments.each do |appt| %>
+        <tr>
+          <td>
+            <strong><%= appt.doctor.full_name %></strong><br>
+            <%= link_to "До профілю", doctor_path(appt.doctor), class: "btn btn-sm btn-outline-secondary mt-1" %>
+          </td>
+          <td><%= appt.doctor.category&.title %></td>
+          <td><%= l(appt.updated_at, format: :short) %></td>
+          <td>
+            <% if appt.recommendation.present? %>
+              <%= link_to "Переглянути", appointment_path(appt), class: "btn btn-sm btn-outline-primary" %>
+            <% else %>
+              —
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>Немає закритих записів.</p>
+<% end %>

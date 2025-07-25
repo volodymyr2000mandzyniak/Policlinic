@@ -15,9 +15,9 @@ class AppointmentsController < ApplicationController
   end
 
   # GET /appointments/:id
-def show
-  @appointment = current_patient.appointments.find(params[:id])
-end
+  def show
+    @appointment = current_patient.appointments.find(params[:id])
+  end
 
 
   # Лікар бачить свої відкриті записи
@@ -26,24 +26,42 @@ end
   end
 
   # GET /appointments/:id/edit
-def edit
-  @appointment = current_doctor.appointments.find(params[:id])
-end
+  def edit
+    @appointment = current_doctor.appointments.find(params[:id])
+  end
 
 
   def update
-  appointment = current_doctor.appointments.find(params[:id])
-  if appointment.update(appointment_params.merge(status: 'closed'))
-    redirect_to appointments_path, notice: "Рекомендація надана, запис закрито"
-  else
-    redirect_to appointments_path, alert: "Помилка при оновленні"
+    appointment = current_doctor.appointments.find(params[:id])
+    if appointment.update(appointment_params.merge(status: 'closed'))
+      redirect_to appointments_path, notice: "Рекомендація надана, запис закрито"
+    else
+      redirect_to appointments_path, alert: "Помилка при оновленні"
+    end
   end
+
+  # GET /appointments/closed
+  def closed
+    @appointments = current_doctor.appointments.includes(:patient).where(status: 'closed')
+  end
+
+
+  # GET /appointments/my_open
+def my_open
+  @appointments = current_patient.appointments.includes(:doctor).where(status: 'open')
 end
+
+# GET /appointments/my_closed
+def my_closed
+  @appointments = current_patient.appointments.includes(:doctor).where(status: 'closed')
+end
+
+
 
 private
 
-def appointment_params
-  params.require(:appointment).permit(:recommendation)
-end
+  def appointment_params
+    params.require(:appointment).permit(:recommendation)
+  end
 
 end

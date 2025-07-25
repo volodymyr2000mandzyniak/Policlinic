@@ -1,0 +1,24 @@
+<h3>✅ Закриті записи</h3>
+
+<% if @appointments.any? %>
+  <table class="table table-bordered table-hover">
+    <thead class="table-light">
+      <tr>
+        <th>👤 Пацієнт</th>
+        <th>📝 Рекомендація</th>
+        <th>📅 Дата</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @appointments.each do |appt| %>
+        <tr>
+          <td><%= appt.patient.full_name %></td>
+          <td><%= appt.recommendation.presence || "—" %></td>
+          <td><%= l(appt.updated_at, format: :short) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>Закритих записів поки що немає.</p>
+<% end %>

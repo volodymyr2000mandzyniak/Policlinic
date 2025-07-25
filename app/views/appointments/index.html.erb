@@ -16,10 +16,11 @@
         <td><%= appt.status %></td>
         <td><%= appt.recommendation.presence || "—" %></td>
         <td>
-          <%= form_with url: appointment_path(appt), method: :put, local: true do |f| %>
-            <%= f.text_area :recommendation, placeholder: "Ваша рекомендація..." %>
-            <%= f.submit "Надіслати", class: "btn btn-sm btn-success mt-2" %>
-          <% end %>
+          <%= form_with model: appt, url: appointment_path(appt), method: :put, local: true do |f| %>
+  <%= f.text_area :recommendation, placeholder: "Ваша рекомендація..." %>
+  <%= f.submit "Надіслати", class: "btn btn-sm btn-success mt-2" %>
+<% end %>
+
         </td>
       </tr>
     <% end %>
