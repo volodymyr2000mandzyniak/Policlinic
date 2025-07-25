@@ -1,21 +1,304 @@
-<div class="px-4 pt-5 my-5 text-center border-bottom">
-  <h1 class="display-4 fw-bold">Meet Our Experienced Doctors</h1>
-    <div class="col-lg-6 mx-auto">
-    <p class="lead mb-4">Our team of dedicated and experienced doctors is committed to providing exceptional healthcare services. With expertise in various medical specialties, our doctors prioritize patient care, ensuring personalized and compassionate treatment. Trust in the expertise of our medical professionals to guide you on your journey to optimal health.</p>
-      <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
-      <% unless doctor_signed_in? || patient_signed_in? %>
-
-      <%= link_to "Я пацієнт", new_patient_session_path, class: "btn btn-primary" %>
-      <%= link_to "Я лікар", new_doctor_session_path, class: "btn btn-secondary" %>
-    <% end %>
-      </div>
-    </div>
-    <div class="overflow-hidden" style="max-height: 30vh;">
-      <div class="container px-5">
-        <%= image_tag('https://randomuser.me/api/portraits/women/2.jpg', alt: 'Description of the image') %> 
-
-        
-        <%# <%= image_tag('foto_htree.jpg', alt: 'Description of the image') %>
+<div class="clinic-homepage">
+  <div class="hero-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+          <h1 class="clinic-title">Ласкаво просимо до нашої клініки</h1>
+          <p class="clinic-subtitle">Медичний центр "Здоров'я" - турбота про вас</p>
+          
+          <div class="clinic-description">
+            <p>Наша команда професійних лікарів готова надати вам якісні медичні послуги. 
+            Ми працюємо, щоб забезпечити кожного пацієнта індивідуальним підходом та 
+            найкращим лікуванням. Ваше здоров'я - наш пріоритет.</p>
+          </div>
+          
+          <div class="auth-buttons">
+            <% unless doctor_signed_in? || patient_signed_in? %>
+              <%= link_to "Увійти як пацієнт", new_patient_session_path, class: "btn patient-btn" %>
+              <%= link_to "Увійти як лікар", new_doctor_session_path, class: "btn doctor-btn" %>
+            <% end %>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+  
+  <div class="doctors-preview">
+    <div class="container">
+      <h2 class="section-title">Наші лікарі</h2>
+      <div class="row justify-content-center">
+        <div class="col-md-4 doctor-card">
+          <div class="doctor-image">
+            <%= image_tag('https://randomuser.me/api/portraits/women/65.jpg', alt: 'Лікар-терапевт', class: 'img-fluid') %>
+          </div>
+          <h3>Анна Петрівна</h3>
+          <p>Лікар-терапевт</p>
+        </div>
+        <div class="col-md-4 doctor-card">
+          <div class="doctor-image">
+            <%= image_tag('https://randomuser.me/api/portraits/men/32.jpg', alt: 'Лікар-кардіолог', class: 'img-fluid') %>
+          </div>
+          <h3>Іван Васильович</h3>
+          <p>Лікар-кардіолог</p>
+        </div>
+        <div class="col-md-4 doctor-card">
+          <div class="doctor-image">
+            <%= image_tag('https://randomuser.me/api/portraits/women/44.jpg', alt: 'Лікар-невролог', class: 'img-fluid') %>
+          </div>
+          <h3>Ольга Ігорівна</h3>
+          <p>Лікар-невролог</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="about-clinic">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h2 class="section-title">Про нашу клініку</h2>
+          <div class="clinic-info">
+            <p>Наша клініка була заснована у 2010 році з метою надання якісних медичних послуг для всіх верств населення.</p>
+            <p>Ми пропонуємо:</p>
+            <ul class="clinic-features">
+              <li>Сучасне медичне обладнання</li>
+              <li>Досвідчених лікарів різних спеціальностей</li>
+              <li>Індивідуальний підхід до кожного пацієнта</li>
+              <li>Комфортні умови перебування</li>
+              <li>Доступні ціни на послуги</li>
+            </ul>
+            <p>Наша місія - зробити якісну медицину доступною для кожного!</p>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <%= image_tag('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80', alt: 'Наша клініка', class: 'img-fluid clinic-building rounded shadow') %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  :root {
+    --primary-color: #2a5bd7;
+    --secondary-color: #4caf50;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --accent-color: #ff6b6b;
+    --background-color: #f5f7fa;
+  }
+  
+  body {
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    background-color: var(--background-color);
+  }
+  
+  .clinic-homepage {
+    min-height: 100vh;
+    background-color: var(--background-color);
+  }
+  
+  .hero-section {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    padding: 5rem 0;
+    border-radius: 0 0 20px 20px;
+    margin-bottom: 3rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .clinic-title {
+    font-weight: 700;
+    color: var(--dark-color);
+    margin-bottom: 1rem;
+    font-size: 2.5rem;
+  }
+  
+  .clinic-subtitle {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    font-weight: 500;
+  }
+  
+  .clinic-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .auth-buttons {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .btn {
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .patient-btn {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  .patient-btn:hover {
+    background-color: #1e4bbb;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .doctor-btn {
+    background-color: var(--secondary-color);
+    color: white;
+  }
+  
+  .doctor-btn:hover {
+    background-color: #3d8b40;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .doctors-preview {
+    padding: 3rem 0;
+    background-color: white;
+    border-radius: 15px;
+    margin: 2rem auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    max-width: 1200px;
+  }
+  
+  .section-title {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: var(--dark-color);
+    font-weight: 700;
+    position: relative;
+  }
+  
+  .section-title:after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: var(--accent-color);
+    margin: 0.5rem auto 0;
+  }
+  
+  .doctor-card {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    background-color: white;
+  }
+  
+  .doctor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .doctor-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 1.5rem;
+    border: 3px solid var(--primary-color);
+  }
+  
+  .doctor-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .about-clinic {
+    padding: 4rem 0;
+    background-color: white;
+    border-radius: 15px;
+    margin: 3rem auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    max-width: 1200px;
+  }
+  
+  .clinic-info {
+    padding: 1rem;
+  }
+  
+  .clinic-info p {
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+  
+  .clinic-features {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 2rem;
+  }
+  
+  .clinic-features li {
+    padding: 0.5rem 0;
+    padding-left: 2rem;
+    position: relative;
+  }
+  
+  .clinic-features li:before {
+    content: '✓';
+    color: var(--secondary-color);
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+  }
+  
+  .clinic-building {
+    max-height: 400px;
+    width: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .clinic-building:hover {
+    transform: scale(1.02);
+  }
+  
+  @media (max-width: 768px) {
+    .clinic-title {
+      font-size: 2rem;
+    }
+    
+    .clinic-subtitle {
+      font-size: 1.2rem;
+    }
+    
+    .auth-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .btn {
+      width: 100%;
+      max-width: 250px;
+      margin-bottom: 0.5rem;
+    }
+    
+    .about-clinic .row {
+      flex-direction: column-reverse;
+    }
+    
+    .clinic-building {
+      margin-bottom: 2rem;
+    }
+  }
+</style>

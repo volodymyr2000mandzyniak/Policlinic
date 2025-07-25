@@ -1,26 +1,477 @@
-<h2>Log in</h2>
-
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :phone %><br />
-    <%= f.text_field :phone, autofocus: true, autocomplete: "tel" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "current-password" %>
-  </div>
-
-  <% if devise_mapping.rememberable? %>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
+<div class="patient-login-page">
+  <div class="container">
+    <div class="row align-items-center g-4 g-lg-5 py-3 py-lg-5">
+      <!-- Ліва частина - інформація -->
+      <div class="col-lg-7 text-center text-lg-start">
+        <div class="patient-content-wrapper">
+          <h1 class="patient-welcome-title">Ласкаво просимо до системи електронного здоров'я</h1>
+          <p class="patient-description">
+            Ваш особистий кабінет надає зручний доступ до медичних послуг.
+            Керуйте своїм здоров'ям онлайн - записуйтесь на прийоми, переглядайте
+            результати аналізів та спілкуйтесь з лікарями.
+          </p>
+          
+          <div class="patient-benefits mt-4">
+            <div class="benefit-item">
+              <div class="benefit-icon-wrapper">
+                <i class="fas fa-calendar-check" aria-hidden="true"></i>
+              </div>
+              <div class="benefit-text">
+                <h3>Онлайн-запис</h3>
+                <p>Оберіть зручний час без черг</p>
+              </div>
+            </div>
+            
+            <div class="benefit-item">
+              <div class="benefit-icon-wrapper">
+                <i class="fas fa-file-medical" aria-hidden="true"></i>
+              </div>
+              <div class="benefit-text">
+                <h3>Медична карта</h3>
+                <p>Вся історія хвороб у вашому телефоні</p>
+              </div>
+            </div>
+            
+            <div class="benefit-item">
+              <div class="benefit-icon-wrapper">
+                <i class="fas fa-comments" aria-hidden="true"></i>
+              </div>
+              <div class="benefit-text">
+                <h3>Онлайн-консультації</h3>
+                <p>Зв'яжіться з лікарем не виходячи з дому</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Права частина - форма входу -->
+      <div class="col-md-10 mx-auto col-lg-5">
+        <div class="patient-login-form">
+          <div class="form-header">
+            <h2 class="form-title">Увійти в особистий кабінет</h2>
+            <p class="form-subtitle">Введіть ваші облікові дані</p>
+          </div>
+          
+          <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+            <div class="form-floating mb-3">
+              <%= f.text_field :phone, autofocus: true, class: "form-control", id: "phone", placeholder: "096 1234567", inputmode: "tel" %>
+              <label for="phone">Номер телефону</label>
+            </div>
+            
+            <div class="form-floating mb-3">
+              <%= f.password_field :password, class: "form-control", id: "password", placeholder: "Пароль", autocomplete: "current-password" %>
+              <label for="password">Пароль</label>
+              <button type="button" class="password-toggle" aria-label="Показати пароль">
+                <i class="fas fa-eye" aria-hidden="true"></i>
+              </button>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <% if devise_mapping.rememberable? %>
+                <div class="form-check">
+                  <%= f.check_box :remember_me, class: "form-check-input", id: "remember_me" %>
+                  <label class="form-check-label" for="remember_me">Запам'ятати мене</label>
+                </div>
+              <% end %>
+              
+              <%= link_to "Забули пароль?", new_password_path(resource_name), class: "forgot-password" %>
+            </div>
+            
+            <%= f.button "Увійти", class: "w-100 btn patient-login-btn", type: "submit" %>
+            
+            <div class="social-login mt-4">
+              <p class="divider-text">або увійдіть через</p>
+              <div class="social-buttons">
+                <button type="button" class="social-btn google-btn">
+                  <i class="fab fa-google" aria-hidden="true"></i>
+                  Google
+                </button>
+                <button type="button" class="social-btn facebook-btn">
+                  <i class="fab fa-facebook-f" aria-hidden="true"></i>
+                  Facebook
+                </button>
+              </div>
+            </div>
+            
+            <div class="alternative-options mt-3">
+              <p class="text-center">Ще не зареєстровані? <%= link_to "Створити акаунт", new_registration_path(resource_name), class: "register-link" %></p>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit "Log in" %>
   </div>
-<% end %>
+</div>
 
-<%= render "patients/shared/links" %>
+<style>
+  :root {
+    --patient-primary: #2563eb;
+    --patient-primary-hover: #1d4ed8;
+    --patient-secondary: #64748b;
+    --patient-accent: #3b82f6;
+    --patient-light: #f8fafc;
+    --patient-dark: #1e293b;
+    --patient-success: #10b981;
+    --patient-border-radius: 12px;
+    --patient-box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --patient-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .patient-login-page {
+    min-height: 100vh;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    background-color: #f1f5f9;
+    background-image: 
+      radial-gradient(at top right, rgba(37, 99, 235, 0.1) 0%, transparent 50%),
+      radial-gradient(at bottom left, rgba(37, 99, 235, 0.1) 0%, transparent 50%);
+  }
+  
+  @media (min-width: 992px) {
+    .patient-login-page {
+      padding: 2rem 0;
+    }
+  }
+  
+  .patient-content-wrapper {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  
+  @media (min-width: 992px) {
+    .patient-content-wrapper {
+      margin: 0;
+      padding: 0 2rem 0 0;
+    }
+  }
+  
+  .patient-welcome-title {
+    font-weight: 800;
+    color: var(--patient-dark);
+    margin-bottom: 1.5rem;
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+    line-height: 1.2;
+  }
+  
+  .patient-description {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--patient-secondary);
+    margin-bottom: 2rem;
+  }
+  
+  .patient-login-form {
+    background: white;
+    padding: 2rem;
+    border-radius: var(--patient-border-radius);
+    box-shadow: var(--patient-box-shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .form-header {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .form-title {
+    color: var(--patient-dark);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+  }
+  
+  .form-subtitle {
+    color: var(--patient-secondary);
+    font-size: 0.95rem;
+  }
+  
+  .form-floating {
+    position: relative;
+    margin-bottom: 1.25rem;
+  }
+  
+  .form-control {
+    height: 56px;
+    border-radius: var(--patient-border-radius);
+    border: 1px solid #e2e8f0;
+    padding: 0 15px 0 45px;
+    font-size: 1rem;
+    transition: var(--patient-transition);
+  }
+  
+  .form-control:focus {
+    border-color: var(--patient-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    outline: none;
+  }
+  
+  .input-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--patient-secondary);
+    font-size: 1rem;
+  }
+  
+  .password-toggle {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--patient-secondary);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0;
+  }
+  
+  .patient-login-btn {
+    background-color: var(--patient-primary);
+    color: white;
+    font-weight: 600;
+    padding: 0.875rem;
+    border-radius: var(--patient-border-radius);
+    border: none;
+    transition: var(--patient-transition);
+    font-size: 1rem;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+  }
+  
+  .patient-login-btn:hover {
+    background-color: var(--patient-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .patient-login-btn:active {
+    transform: translateY(0);
+  }
+  
+  .forgot-password {
+    color: var(--patient-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: var(--patient-transition);
+  }
+  
+  .forgot-password:hover {
+    color: var(--patient-primary);
+    text-decoration: underline;
+  }
+  
+  .patient-benefits {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+  }
+  
+  .benefit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: var(--patient-border-radius);
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: var(--patient-transition);
+  }
+  
+  .benefit-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+  }
+  
+  .benefit-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(37, 99, 235, 0.1);
+    color: var(--patient-primary);
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  
+  .benefit-text h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--patient-dark);
+  }
+  
+  .benefit-text p {
+    font-size: 0.875rem;
+    color: var(--patient-secondary);
+    margin-bottom: 0;
+    line-height: 1.5;
+  }
+  
+  .social-login {
+    text-align: center;
+  }
+  
+  .divider-text {
+    position: relative;
+    color: var(--patient-secondary);
+    font-size: 0.875rem;
+    margin: 1.5rem 0;
+  }
+  
+  .divider-text::before,
+  .divider-text::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 30%;
+    height: 1px;
+    background-color: #e2e8f0;
+  }
+  
+  .divider-text::before {
+    left: 0;
+  }
+  
+  .divider-text::after {
+    right: 0;
+  }
+  
+  .social-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+  
+  .social-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    border-radius: var(--patient-border-radius);
+    border: 1px solid #e2e8f0;
+    background-color: white;
+    color: var(--patient-dark);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--patient-transition);
+  }
+  
+  .social-btn:hover {
+    background-color: #f8fafc;
+    transform: translateY(-1px);
+  }
+  
+  .google-btn {
+    color: #db4437;
+  }
+  
+  .facebook-btn {
+    color: #1877f2;
+  }
+  
+  .alternative-options {
+    font-size: 0.95rem;
+    color: var(--patient-secondary);
+  }
+  
+  .register-link {
+    color: var(--patient-primary);
+    font-weight: 500;
+    text-decoration: none;
+    transition: var(--patient-transition);
+  }
+  
+  .register-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Анімації */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .patient-login-form {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+  
+  .benefit-item:nth-child(1) { animation: fadeIn 0.6s ease-out 0.1s forwards; opacity: 0; }
+  .benefit-item:nth-child(2) { animation: fadeIn 0.6s ease-out 0.2s forwards; opacity: 0; }
+  .benefit-item:nth-child(3) { animation: fadeIn 0.6s ease-out 0.3s forwards; opacity: 0; }
+  
+  /* Адаптація для мобільних */
+  @media (max-width: 991.98px) {
+    .patient-login-page {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+    }
+    
+    .patient-content-wrapper {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    
+    .patient-benefits {
+      justify-content: center;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .benefit-item {
+      text-align: left;
+    }
+  }
+  
+  @media (max-width: 575.98px) {
+    .patient-login-form {
+      padding: 1.5rem;
+    }
+    
+    .social-buttons {
+      flex-direction: column;
+    }
+    
+    .social-btn {
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+  // Функція для перемикання видимості пароля
+  document.querySelectorAll('.password-toggle').forEach(button => {
+    button.addEventListener('click', function() {
+      const passwordInput = this.closest('.form-floating').querySelector('input');
+      const icon = this.querySelector('i');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+        this.setAttribute('aria-label', 'Приховати пароль');
+      } else {
+        passwordInput.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+        this.setAttribute('aria-label', 'Показати пароль');
+      }
+    });
+  });
+  
+  // Маска для телефону
+  const phoneInput = document.getElementById('phone');
+  if (phoneInput) {
+    phoneInput.addEventListener('input', function(e) {
+      let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+      e.target.value = !x[2] ? x[1] : x[1] + ' ' + x[2] + (x[3] ? ' ' + x[3] : '');
+    });
+  }
+</script>

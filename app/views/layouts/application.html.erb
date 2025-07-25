@@ -7,8 +7,12 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <!-- Підключення Font Awesome 6 (остання версія) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
     <%= yield :head %>
-
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
@@ -18,15 +22,19 @@
   </head>
 
   <body>
-        <%= render 'layouts/navbar'%>
+    <%= render 'layouts/navbar' %>
 
     <% flash.each do |key, message| %>
-      <div class="alert alert-<%= key %>"><%= message %></div>
+      <div class="alert alert-<%= key %> alert-dismissible fade show" role="alert">
+        <%= message %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
     <% end %>
 
-
-    <%= yield %>
-
+    <main class="container mt-4">
+      <%= yield %>
+    </main>
+    <%= render 'layouts/footer' %>
 
   </body>
 </html>
