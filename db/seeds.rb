@@ -1,14 +1,14 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+# db/seeds.rb
 
+# Очищаємо дані (у правильному порядку для уникнення помилок foreign key)
+Appointment.destroy_all
+Patient.destroy_all
+Doctor.destroy_all
+Category.destroy_all
 
+puts "🔄 Очищення бази даних..."
+
+# Створення категорій
 categories = [
   "Терапевт",
   "Стоматолог",
@@ -23,37 +23,82 @@ categories.each do |title|
   Category.find_or_create_by!(title: title)
 end
 
-puts "✅ Categories seeded successfully!"
+puts "✅ Категорії створені успішно!"
 
-
-# require 'faker'
-
-# Doctor.destroy_all
-
+# # Створення лікарів
 # puts "Створюємо лікарів для кожної категорії..."
 
 # Category.find_each do |category|
 #   rand(2..4).times do
-#     first_name = Faker::Name.first_name
-#     last_name = Faker::Name.last_name
-#     phone = Faker::PhoneNumber.unique.cell_phone_in_e164
-#     email = Faker::Internet.unique.email(name: "#{first_name}.#{last_name}")
-
 #     Doctor.create!(
-#       email: email,
-#       phone: phone,
+#       email: Faker::Internet.unique.email,
+#       phone: Faker::PhoneNumber.unique.cell_phone_in_e164.gsub(/\D/, '').first(12),
 #       password: "password123",
 #       password_confirmation: "password123",
-#       first_name: first_name,
-#       last_name: last_name,
+#       first_name: Faker::Name.first_name,
+#       last_name: Faker::Name.last_name,
 #       date_of_birth: Faker::Date.birthday(min_age: 30, max_age: 60),
 #       address: Faker::Address.full_address,
-#       category_id: category.id
+#       category: category,
+#       approved: true
 #     )
 #   end
-
-#   puts "✔ Створено лікарів для категорії: #{category.title}"
+#   puts "✔ Створено #{Doctor.where(category: category).count} лікарів для категорії: #{category.title}"
 # end
 
-puts "✅ Готово!"
-AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
+# puts "✅ Лікарі створені успішно!"
+
+# # Створення пацієнтів
+# puts "Створюємо пацієнтів..."
+
+# 10.times do
+#   Patient.create!(
+#     email: Faker::Internet.unique.email,
+#     phone: Faker::PhoneNumber.unique.cell_phone_in_e164.gsub(/\D/, '').first(12),
+#     password: "password123",
+#     password_confirmation: "password123",
+#     first_name: Faker::Name.first_name,
+#     last_name: Faker::Name.last_name,
+#     date_of_birth: Faker::Date.birthday(min_age: 18, max_age: 90),
+#     address: Faker::Address.full_address
+#   )
+# end
+
+# puts "✅ Пацієнти створені успішно!"
+
+# # Створення записів на прийом
+# puts "Створюємо записи на прийом..."
+
+# doctors = Doctor.all
+# patients = Patient.all
+
+# 20.times do
+#   doctor = doctors.sample
+#   patient = patients.sample
+  
+#   if doctor.can_accept_new_appointment?
+#     appointment = Appointment.create!(
+#       doctor: doctor,
+#       patient: patient,
+#       status: ['open', 'closed'].sample,
+#       recommendation: Faker::Lorem.sentence(word_count: 5) # Використовуємо однину (recommendation)
+#     )
+    
+#     puts "✔ Запис створено: #{appointment.id} - Лікар: #{doctor.full_name}, Пацієнт: #{patient.full_name}"
+#   else
+#     puts "⚠ Лікар #{doctor.full_name} вже має максимальну кількість записів"
+#   end
+# end
+
+# puts "✅ Записи на прийом створені успішно!"
+
+# Створення адміністратора
+if Rails.env.development?
+  AdminUser.find_or_create_by!(email: 'admin@example.com') do |admin|
+    admin.password = 'password'
+    admin.password_confirmation = 'password'
+  end
+  puts "✅ Тестовий адміністратор створений (admin@example.com / password)"
+end
+
+puts "🎉 Базу даних успішно заповнено тестовими даними!"

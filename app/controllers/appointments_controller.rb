@@ -1,67 +1,59 @@
 class AppointmentsController < ApplicationController
-  before_action :authenticate_patient!, only: [:create]
-  before_action :authenticate_doctor!, only: [:index, :update]
+  load_and_authorize_resource except: [:closed, :my_open, :my_closed]
 
-  # Пацієнт записується на прийом
   def create
-    doctor = Doctor.find(params[:doctor_id])
+    @appointment = Appointment.new(appointment_params)
+    @appointment.patient = current_patient if current_patient
+    @appointment.status = 'open'
 
-    if doctor.approved? && doctor.can_accept_new_appointment?
-      appointment = current_patient.appointments.create(doctor: doctor)
-      redirect_to doctor_path(doctor), notice: "Запис успішно створено!"
+    if @appointment.save
+      redirect_to doctor_path(@appointment.doctor), notice: "Запис успішно створено!"
     else
-      redirect_to doctor_path(doctor), alert: "Неможливо записатись до цього лікаря."
+      redirect_to doctor_path(@appointment.doctor), alert: "Неможливо записатись до цього лікаря."
     end
   end
 
-  # GET /appointments/:id
   def show
-    @appointment = current_patient.appointments.find(params[:id])
+    # load_and_authorize_resource вже завантажить і перевірить доступ
   end
 
-
-  # Лікар бачить свої відкриті записи
   def index
-    @appointments = current_doctor.appointments.includes(:patient).where(status: 'open')
-  end
-
-  # GET /appointments/:id/edit
-  def edit
-    @appointment = current_doctor.appointments.find(params[:id])
+    if current_doctor
+      @appointments = current_doctor.appointments.includes(:patient).where(status: 'open')
+    elsif current_patient
+      @appointments = current_patient.appointments.includes(:doctor)
+    else
+      redirect_to root_path, alert: "Доступ заборонено"
+    end
   end
 
 
   def update
-    appointment = current_doctor.appointments.find(params[:id])
-    if appointment.update(appointment_params.merge(status: 'closed'))
+    if @appointment.update(appointment_params.merge(status: 'closed'))
       redirect_to appointments_path, notice: "Рекомендація надана, запис закрито"
     else
       redirect_to appointments_path, alert: "Помилка при оновленні"
     end
   end
 
-  # GET /appointments/closed
   def closed
+    authorize! :read, Appointment
     @appointments = current_doctor.appointments.includes(:patient).where(status: 'closed')
   end
 
-
-  # GET /appointments/my_open
-def my_open
-  @appointments = current_patient.appointments.includes(:doctor).where(status: 'open')
-end
-
-# GET /appointments/my_closed
-def my_closed
-  @appointments = current_patient.appointments.includes(:doctor).where(status: 'closed')
-end
-
-
-
-private
-
-  def appointment_params
-    params.require(:appointment).permit(:recommendation)
+  def my_open
+    authorize! :read, Appointment
+    @appointments = current_patient.appointments.includes(:doctor).where(status: 'open')
   end
 
+  def my_closed
+    authorize! :read, Appointment
+    @appointments = current_patient.appointments.includes(:doctor).where(status: 'closed')
+  end
+
+  private
+
+  def appointment_params
+    params.require(:appointment).permit(:doctor_id, :recommendation)
+  end
 end
