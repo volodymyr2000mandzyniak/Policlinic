@@ -11,6 +11,12 @@ Rails.application.routes.draw do
   resources :patients, only: [ :index, :show ], controller: "patients"
   resources :doctors,  only: [ :index, :show ], controller: "doctors"
 
-  resources :appointments
+  resources :appointments, except: [:new, :destroy] do
+  collection do
+    get :closed
+    get :my_open
+    get :my_closed
+  end
+end
 
 end

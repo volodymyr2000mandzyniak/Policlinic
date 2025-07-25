@@ -1,80 +1,252 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-
-      <div class="card mb-4 shadow-sm">
-        <div class="row g-0">
-          <div class="col-md-4 d-flex align-items-center justify-content-center bg-light p-3">
-            <%= image_tag("https://randomuser.me/api/portraits/men/#{rand(1..80)}.jpg", class: "img-fluid rounded-circle", alt: "Patient Avatar", style: "width: 150px; height: 150px; object-fit: cover;") %>
+<div class="patient-profile-container">
+  <div class="profile-card">
+    <div class="profile-header">
+      <h2><i class="fas fa-user-circle"></i> Медична картка пацієнта</h2>
+    </div>
+    
+    <div class="profile-content">
+      <div class="avatar-section">
+        <%= image_tag("https://randomuser.me/api/portraits/men/#{rand(1..80)}.jpg", class: "patient-avatar", alt: "Patient Avatar") %>
+        <div class="profile-actions">
+          <%= link_to "<i class='fas fa-edit'></i> Редагувати".html_safe, edit_patient_registration_path, class: "btn edit-btn" %>
+          <%= button_to "<i class='fas fa-sign-out-alt'></i> Вийти".html_safe, destroy_patient_session_path, method: :delete, class: "btn logout-btn" %>
+        </div>
+      </div>
+      
+      <div class="profile-details">
+        <div class="detail-section">
+          <h3><i class="fas fa-id-card"></i> Особисті дані</h3>
+          <div class="detail-row">
+            <span class="detail-label">Ім'я:</span>
+            <span class="detail-value"><%= @patient.first_name %></span>
           </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <h4 class="card-title mb-3">👤 Ваш профіль</h4>
-
-              <p><strong>Ім'я:</strong> <%= @patient.first_name %></p>
-              <p><strong>Прізвище:</strong> <%= @patient.last_name %></p>
-              <p><strong>Email:</strong> <%= @patient.email %></p>
-              <p><strong>Телефон:</strong> <%= @patient.phone %></p>
-              <p><strong>Дата народження:</strong> <%= @patient.date_of_birth.strftime("%d.%m.%Y") if @patient.date_of_birth %></p>
-              <p><strong>Адреса:</strong> <%= @patient.address.presence || "—" %></p>
-
-              <div class="mt-4 d-flex gap-2">
-                <%= link_to "✏️ Редагувати профіль", edit_patient_registration_path, class: "btn btn-outline-success btn-sm" %>
-                <%= button_to "🚪 Вийти", destroy_patient_session_path, method: :delete, class: "btn btn-outline-danger btn-sm" %>
-              </div>
-            </div>
+          <div class="detail-row">
+            <span class="detail-label">Прізвище:</span>
+            <span class="detail-value"><%= @patient.last_name %></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Дата народження:</span>
+            <span class="detail-value"><%= @patient.date_of_birth.strftime("%d.%m.%Y") if @patient.date_of_birth %></span>
+          </div>
+        </div>
+        
+        <div class="detail-section">
+          <h3><i class="fas fa-address-book"></i> Контактна інформація</h3>
+          <div class="detail-row">
+            <span class="detail-label">Email:</span>
+            <span class="detail-value"><%= @patient.email %></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Телефон:</span>
+            <span class="detail-value"><%= @patient.phone %></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Адреса:</span>
+            <span class="detail-value"><%= @patient.address.presence || "Не вказано" %></span>
           </div>
         </div>
       </div>
-
-      <h4 class="mb-3">📋 Ваші записи</h4>
-
-      <% if @appointments.any? %>
-        <div class="table-responsive">
-          <table class="table table-striped table-bordered align-middle">
-            <thead class="table-light">
-              <tr>
-                <th>👨‍⚕️ Лікар</th>
-                <th>📂 Категорія</th>
-                <th>📌 Статус</th>
-                <th>📝 Рекомендація</th>
-                <th>📅 Дата</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @appointments.each do |appt| %>
-                <tr>
-                  <td>
-                    <div class="d-flex flex-column">
-                      <strong><%= appt.doctor.full_name %></strong>
-                      <%= link_to "Перейти до лікаря", doctor_path(appt.doctor), class: "btn btn-sm btn-outline-primary mt-1" %>
-                    </div>
-                  </td>
-                  <td><%= appt.doctor.category&.title %></td>
-                  <td>
-                    <% if appt.status == "open" %>
-                      <span class="badge bg-warning text-dark">Очікує</span>
-                    <% else %>
-                      <span class="badge bg-success">Закрито</span>
-                    <% end %>
-                  </td>
-                  <td>
-                    <% if appt.recommendation.present? %>
-                      <%= link_to "Переглянути", appointment_path(appt), class: "btn btn-sm btn-outline-primary" %>
-                    <% else %>
-                      —
-                    <% end %>
-                  </td>
-                  <td><%= l(appt.created_at, format: :short) %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
-      <% else %>
-        <p class="text-muted">У вас поки що немає записів.</p>
-      <% end %>
-
+    </div>
+  </div>
+  
+  <div class="appointments-section">
+    <h3><i class="fas fa-calendar-alt"></i> Ваші медичні записи</h3>
+    <div class="appointments-actions">
+      <%= link_to "<i class='fas fa-folder-open'></i> Відкриті записи".html_safe, my_open_appointments_path, class: "btn appointments-btn open-btn" %>
+      <%= link_to "<i class='fas fa-check-circle'></i> Закриті записи".html_safe, my_closed_appointments_path, class: "btn appointments-btn closed-btn" %>
     </div>
   </div>
 </div>
+
+<style>
+  .patient-profile-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .profile-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+  
+  .profile-header {
+    background: linear-gradient(135deg, #1976d2, #0d47a1);
+    color: white;
+    padding: 1.5rem;
+  }
+  
+  .profile-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .profile-content {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1.5rem;
+  }
+  
+  .avatar-section {
+    flex: 0 0 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+  
+  .patient-avatar {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #e3f2fd;
+    margin-bottom: 1.5rem;
+  }
+  
+  .profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  
+  .btn {
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .edit-btn {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border: 1px solid #bbdefb;
+  }
+  
+  .edit-btn:hover {
+    background-color: #bbdefb;
+  }
+  
+  .logout-btn {
+    background-color: #ffebee;
+    color: #d32f2f;
+    border: 1px solid #ffcdd2;
+  }
+  
+  .logout-btn:hover {
+    background-color: #ffcdd2;
+  }
+  
+  .profile-details {
+    flex: 1;
+    min-width: 300px;
+    padding: 1rem;
+  }
+  
+  .detail-section {
+    margin-bottom: 1.5rem;
+  }
+  
+  .detail-section h3 {
+    color: #1976d2;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .detail-row {
+    display: flex;
+    margin-bottom: 0.8rem;
+    line-height: 1.5;
+  }
+  
+  .detail-label {
+    font-weight: 600;
+    color: #424242;
+    min-width: 150px;
+  }
+  
+  .detail-value {
+    color: #616161;
+  }
+  
+  .appointments-section {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+  }
+  
+  .appointments-section h3 {
+    color: #1976d2;
+    font-size: 1.3rem;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .appointments-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  .appointments-btn {
+    padding: 0.7rem 1.2rem;
+    font-size: 1rem;
+  }
+  
+  .open-btn {
+    background-color: #e3f2fd;
+    color: #1976d2;
+  }
+  
+  .open-btn:hover {
+    background-color: #bbdefb;
+  }
+  
+  .closed-btn {
+    background-color: #e8f5e9;
+    color: #388e3c;
+  }
+  
+  .closed-btn:hover {
+    background-color: #c8e6c9;
+  }
+  
+  @media (max-width: 768px) {
+    .profile-content {
+      flex-direction: column;
+    }
+    
+    .avatar-section {
+      flex: 1;
+    }
+    
+    .profile-actions {
+      flex-direction: row;
+      margin-bottom: 1rem;
+    }
+  }
+</style>
