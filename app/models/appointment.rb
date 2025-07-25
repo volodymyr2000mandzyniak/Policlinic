@@ -1,19 +1,19 @@
 class Appointment < ApplicationRecord
-  belongs_to :doctor
-  belongs_to :patient
+  belongs_to :doctor, optional: true
+  belongs_to :patient, optional: true
 
   validates :status, inclusion: { in: %w[open closed] }
-
-  before_validation :set_default_status, on: :create
+  validate :doctor_availability, on: :create
 
   enum status: { open: "open", closed: "closed" }
 
+  private
 
-  def set_default_status
-    self.status ||= 'open'
-  end
+  def doctor_availability
+    return unless doctor && status == "open"
 
-  def close!(recommendation_text)
-    update(status: 'closed', recommendation: recommendation_text)
+    unless doctor.can_accept_new_appointment?
+      errors.add(:base, "Лікар вже має максимальну кількість відкритих записів (10)")
+    end
   end
 end

@@ -1,8 +1,22 @@
 # app/controllers/application_controller.rb
 class ApplicationController < ActionController::Base
+  include CanCan::ControllerAdditions
+
   before_action :configure_permitted_parameters, if: :devise_controller?
 
+  include CanCan::ControllerAdditions
+
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to root_url, alert: exception.message
+  end
+
+
   protected
+
+  def current_ability
+  @current_ability ||= Ability.new(current_admin_user || current_doctor || current_patient)
+end
+
 
   def configure_permitted_parameters
     params = permitted_devise_params

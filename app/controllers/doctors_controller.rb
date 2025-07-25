@@ -1,19 +1,17 @@
 class DoctorsController < ApplicationController
+  load_and_authorize_resource
+
   def index
     @categories = Category.all
     @doctors = if params[:category_id].present?
-                Doctor.where(category_id: params[:category_id])
-    else
-                Doctor.all
-    end
+                Doctor.where(category_id: params[:category_id]).approved
+              else
+                Doctor.approved
+              end
   end
 
   def show
-    @doctor = Doctor.find(params[:id])
+    # load_and_authorize_resource вже завантажить і перевірить доступ
     @appointments = @doctor.appointments.includes(:patient)
-
-    unless @doctor.approved? || current_doctor == @doctor
-      redirect_to root_path, alert: "Профіль лікаря ще не підтверджено."
-    end
   end
 end
