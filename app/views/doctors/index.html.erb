@@ -10,8 +10,8 @@
         <div class="doctor-card <%= 'verified' if doctor.approved? %>">
           <div class="doctor-image">
             <%= image_tag("https://randomuser.me/api/portraits/men/#{rand(1..80)}.jpg",
-                          class: "doctor-avatar",
-                          alt: "Doctor #{doctor.full_name}") %>
+                        class: "doctor-avatar",
+                        alt: "Doctor #{doctor.full_name}") %>
             <% if doctor.approved? %>
               <div class="verified-badge">
                 <i class="fas fa-check-circle"></i> Підтверджено
@@ -20,14 +20,19 @@
           </div>
           
           <div class="doctor-info">
-            <h3>
-              <%= link_to doctor.full_name, doctor_path(doctor), class: "doctor-name" %>
-            </h3>
+            <div class="free-slots-badge">
+              <i class="fas fa-calendar-check"></i>
+              <span><%= doctor.free_appointment_slots %> вільних</span>
+            </div>
+            
+            <h2 class="doctor-name">
+              <%= doctor.full_name %>
+            </h2>
             
             <% if doctor.category %>
               <div class="specialty">
                 <i class="fas fa-stethoscope"></i>
-                <%= doctor.category.title %>
+                <span><%= doctor.category.title %></span>
               </div>
             <% end %>
             
@@ -46,7 +51,9 @@
               </div>
             </div>
             
-            <%= link_to "Записатись на прийом", doctor_path(doctor), class: "appointment-btn" %>
+            <div class="doctor-actions">
+              <%= link_to "Перейти до лікаря", doctor_path(doctor), class: "doctor-btn" %>
+            </div>
           </div>
         </div>
       <% end %>
@@ -81,11 +88,13 @@
 </div>
 
 <style>
+  /* Base Styles */
   .doctors-container {
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 1rem;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
   }
   
   .doctors-header {
@@ -109,6 +118,7 @@
     margin-top: 0;
   }
   
+  /* Layout */
   .doctors-layout {
     display: flex;
     gap: 30px;
@@ -116,20 +126,24 @@
   
   .doctors-list {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
   
   .categories-sidebar {
     width: 300px;
   }
   
+  /* Doctor Card */
   .doctor-card {
     background: white;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    margin-bottom: 1.5rem;
     overflow: hidden;
     display: flex;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease;
+    position: relative;
   }
   
   .doctor-card:hover {
@@ -169,6 +183,25 @@
     gap: 5px;
   }
   
+  .free-slots-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: rgba(25, 118, 210, 0.9);
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  
+  .free-slots-badge i {
+    font-size: 0.8rem;
+  }
+  
   .doctor-info {
     padding: 1.5rem;
     flex: 1;
@@ -178,15 +211,9 @@
   
   .doctor-name {
     color: #1976d2;
-    font-size: 1.4rem;
+    font-size: 1.8rem;
     margin: 0 0 0.5rem 0;
-    text-decoration: none;
-    transition: color 0.3s;
-  }
-  
-  .doctor-name:hover {
-    color: #0d47a1;
-    text-decoration: underline;
+    font-weight: 600;
   }
   
   .specialty {
@@ -196,18 +223,20 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    font-size: 1.1rem;
   }
   
   .doctor-contacts {
-    margin-bottom: 1.5rem;
-    flex: 1;
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
   }
   
   .contact-item {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 0.7rem;
     color: #424242;
   }
   
@@ -217,8 +246,12 @@
     text-align: center;
   }
   
-  .appointment-btn {
-    background-color: #1976d2;
+  .doctor-actions {
+    margin-top: auto;
+  }
+  
+  .doctor-btn {
+    background-color: #4caf50;
     color: white;
     padding: 0.75rem 1.5rem;
     border-radius: 5px;
@@ -226,13 +259,14 @@
     text-decoration: none;
     font-weight: 500;
     transition: background-color 0.3s;
-    align-self: flex-start;
+    display: inline-block;
   }
   
-  .appointment-btn:hover {
-    background-color: #1565c0;
+  .doctor-btn:hover {
+    background-color: #3d8b40;
   }
   
+  /* Categories Sidebar */
   .categories-card {
     background: white;
     border-radius: 10px;
@@ -293,6 +327,7 @@
     font-size: 0.8rem;
   }
   
+  /* Responsive */
   @media (max-width: 992px) {
     .doctors-layout {
       flex-direction: column;
@@ -300,6 +335,7 @@
     
     .categories-sidebar {
       width: 100%;
+      margin-top: 2rem;
     }
     
     .doctor-card {
@@ -309,6 +345,11 @@
     .doctor-image {
       width: 100%;
       height: 200px;
+    }
+    
+    .free-slots-badge {
+      top: 10px;
+      right: 10px;
     }
   }
   
@@ -321,8 +362,13 @@
       padding: 1rem;
     }
     
-    .appointment-btn {
+    .doctor-name {
+      font-size: 1.5rem;
+    }
+    
+    .doctor-btn {
       width: 100%;
+      text-align: center;
     }
   }
 </style>

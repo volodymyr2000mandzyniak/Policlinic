@@ -1,19 +1,28 @@
 class AppointmentsController < ApplicationController
+  # Автоматично завантажує і авторизує ресурс для екшенів, окрім вказаних
   load_and_authorize_resource except: [:closed, :my_open, :my_closed]
 
-def create
-  @appointment = Appointment.new(appointment_params)
-  @appointment.patient = current_patient
-  @appointment.status = 'open'
+  before_action :authorize_appointment!, only: [:update]
 
-  if @appointment.save
-    redirect_to doctor_path(@appointment.doctor), notice: "Запис успішно створено!"
-  else
-    redirect_to doctor_path(@appointment.doctor), 
-                alert: "Помилка: #{@appointment.errors.full_messages.join(', ')}"
+  def create
+    # Захищаємося: дозволяємо лише до активних лікарів
+    doctor = Doctor.approved.find_by(id: appointment_params[:doctor_id])
+
+    unless doctor
+      redirect_to root_path, alert: "Обраного лікаря не існує або він неактивний"
+      return
+    end
+
+    @appointment = Appointment.new(doctor: doctor)
+    @appointment.patient = current_patient
+    @appointment.status = 'open'
+
+    if @appointment.save
+      redirect_to doctor_path(doctor), notice: "Запис успішно створено!"
+    else
+      redirect_to doctor_path(doctor), alert: "Помилка: #{@appointment.errors.full_messages.join(', ')}"
+    end
   end
-end
-
 
   def index
     if current_doctor
@@ -26,6 +35,7 @@ end
   end
 
   def update
+    # статус змінюється на closed, додається рекомендація
     if @appointment.update(appointment_params.merge(status: 'closed'))
       redirect_to appointments_path, notice: "Рекомендація надана, запис закрито"
     else
@@ -54,6 +64,16 @@ end
   private
 
   def appointment_params
-  params.require(:appointment).permit(:doctor_id, :recommendation)
+    if current_doctor
+      # Лікар може оновити recommendation
+      params.require(:appointment).permit(:recommendation)
+    else
+      # Пацієнт лише створює запис, передає тільки doctor_id
+      params.require(:appointment).permit(:doctor_id)
+    end
+  end
+
+  def authorize_appointment!
+    authorize! :update, @appointment
   end
 end

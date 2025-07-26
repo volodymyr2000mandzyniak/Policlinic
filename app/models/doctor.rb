@@ -13,7 +13,13 @@ class Doctor < ApplicationRecord
     appointments.open.count < 10
   end
 
+
   scope :approved, -> { where(approved: true) }
+
+  def free_appointment_slots
+    [10 - appointments.open.count, 0].max
+  end
+
 
   def approved?
     approved == true

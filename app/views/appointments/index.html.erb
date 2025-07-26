@@ -1,28 +1,106 @@
-<h1>Ваші записи</h1>
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">📋 Ваші записи</h1>
+<%= link_to "← Назад", (current_patient&.id ? patient_path(current_patient) : doctor_path(current_doctor)), class: "btn btn-outline-secondary" %>  </div>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Пацієнт</th>
-      <th>Статус</th>
-      <th>Рекомендація</th>
-      <th>Дія</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @appointments.each do |appt| %>
-      <tr>
-        <td><%= appt.patient.first_name %></td>
-        <td><%= appt.status %></td>
-        <td><%= appt.recommendation.presence || "—" %></td>
-        <td>
-          <%= form_with model: appt, url: appointment_path(appt), method: :put, local: true do |f| %>
-  <%= f.text_area :recommendation, placeholder: "Ваша рекомендація..." %>
-  <%= f.submit "Надіслати", class: "btn btn-sm btn-success mt-2" %>
-<% end %>
+  <% if @appointments.any? %>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>👤 Пацієнт</th>
+            <th>📅 Дата</th>
+            <th>📌 Статус</th>
+            <th>📝 Рекомендація</th>
+            <th>🔧 Дії</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @appointments.each_with_index do |appt, index| %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td><%= appt.patient.full_name %></td>
+              <td><%= l(appt.created_at, format: :short) %></td>
+              <td>
+                <% if appt.closed? %>
+                  <span class="badge bg-success">Закрито</span>
+                <% else %>
+                  <span class="badge bg-warning text-dark">Очікує</span>
+                <% end %>
+              </td>
+              <td><%= appt.recommendation.presence || "—" %></td>
+              <td>
+                <% if current_doctor && appt.open? %>
+                  <%= link_to "Додати рекомендацію", edit_appointment_path(appt), class: "btn btn-sm btn-primary" %>
+                <% elsif current_doctor %>
+                  <%= link_to "Редагувати", edit_appointment_path(appt), class: "btn btn-sm btn-outline-secondary" %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="alert alert-info">
+      <i class="fas fa-info-circle"></i> Записів поки немає.
+      <% if current_doctor %>
+        <%= link_to "Перейти до списку пацієнтів", patients_path, class: "alert-link" %>
+      <% else %>
+        <%= link_to "Записатись на прийом", doctors_path, class: "alert-link" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
 
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<style>
+  .table-responsive {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+  
+  .table th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+    border-bottom-width: 2px;
+    text-align: center;
+  }
+  
+  .table td:first-child {
+    text-align: center;
+    font-weight: 500;
+    color: #6c757d;
+  }
+  
+  .badge {
+    font-size: 0.85em;
+    padding: 0.35em 0.65em;
+    font-weight: 500;
+  }
+  
+  .bg-success {
+    background-color: #198754 !important;
+  }
+  
+  .bg-warning {
+    background-color: #ffc107 !important;
+  }
+  
+  .alert {
+    border-radius: 8px;
+    padding: 1.25rem;
+  }
+  
+  .btn-outline-secondary {
+    border-radius: 20px;
+    padding: 0.375rem 1rem;
+  }
+  
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 0.2rem;
+  }
+</style>
