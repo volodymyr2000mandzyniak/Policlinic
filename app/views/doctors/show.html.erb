@@ -2,20 +2,35 @@
   <div class="doctor-card">
     <div class="doctor-header">
       <h2><i class="fas fa-user-md"></i> Профіль лікаря</h2>
-      <% if patient_signed_in? && @doctor.approved? && @doctor.can_accept_new_appointment? %>
-        <%= button_to "<i class='fas fa-calendar-plus'></i> Записатись на прийом".html_safe, 
-              appointments_path(doctor_id: @doctor.id), 
-              method: :post, 
-              class: "btn appointment-btn" %>
+      <% if patient_signed_in? && @doctor.approved? %>
+        <% if @doctor.can_accept_new_appointment? %>
+          <%= form_with url: appointments_path, method: :post, class: "appointment-form", scope: :appointment do |f| %>
+  <%= f.hidden_field :doctor_id, value: @doctor.id %>
+  <%= button_tag type: 'submit', class: "btn appointment-btn", data: { confirm: "Ви впевнені, що хочете записатись до цього лікаря?" } do %>
+    <i class='fas fa-calendar-plus'></i> Записатись на прийом
+  <% end %>
+<% end %>
+
+        <% else %>
+          <div class="alert alert-warning appointment-alert">
+            <i class="fas fa-exclamation-circle"></i> Цей лікар зараз не приймає нових записів
+          </div>
+        <% end %>
       <% end %>
     </div>
-    
+    <div class="doctor-actions">
+            <%= link_to "<i class='fas fa-edit'></i> Редагувати".html_safe, 
+                  edit_doctor_registration_path, 
+                  class: "btn edit-btn" %>
+            <%= button_to "<i class='fas fa-sign-out-alt'></i> Вийти".html_safe, 
+                  destroy_doctor_session_path, 
+                  method: :delete, 
+                  class: "btn logout-btn" %>
+          </div>
     <div class="doctor-content">
       <div class="doctor-avatar-section">
-        <%= image_tag("https://randomuser.me/api/portraits/men/#{rand(1..80)}.jpg", 
-              class: "doctor-avatar", 
-              alt: "Doctor Avatar") %>
-              
+        <%# <%= image_tag(avatar_for(@doctor), class: "doctor-avatar", alt: "Doctor Avatar") %> %>
+        
         <% if doctor_signed_in? && current_doctor == @doctor %>
           <div class="doctor-status">
             <% if @doctor.approved? %>
@@ -30,13 +45,9 @@
           </div>
           
           <div class="doctor-actions">
-            <%= link_to "<i class='fas fa-edit'></i> Редагувати".html_safe, 
-                  edit_doctor_registration_path, 
-                  class: "btn edit-btn" %>
-            <%= button_to "<i class='fas fa-sign-out-alt'></i> Вийти".html_safe, 
-                  destroy_doctor_session_path, 
-                  method: :delete, 
-                  class: "btn logout-btn" %>
+            <%= link_to edit_doctor_registration_path, class: "btn edit-btn" do %>
+              <i class="fas fa-edit"></i> Редагувати профіль
+            <% end %>
           </div>
         <% end %>
       </div>
@@ -46,16 +57,12 @@
           <h3><i class="fas fa-id-card"></i> Особисті дані</h3>
           <div class="detail-grid">
             <div class="detail-item">
-              <span class="detail-label">Ім'я:</span>
-              <span class="detail-value"><%= @doctor.first_name %></span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Прізвище:</span>
-              <span class="detail-value"><%= @doctor.last_name %></span>
+              <span class="detail-label">Повне ім'я:</span>
+              <span class="detail-value"><%= @doctor.full_name %></span>
             </div>
             <div class="detail-item">
               <span class="detail-label">Дата народження:</span>
-              <span class="detail-value"><%= @doctor.date_of_birth %></span>
+              <span class="detail-value"><%= @doctor.date_of_birth.strftime("%d.%m.%Y") if @doctor.date_of_birth %></span>
             </div>
           </div>
         </div>
@@ -64,12 +71,12 @@
           <h3><i class="fas fa-address-book"></i> Контактна інформація</h3>
           <div class="detail-grid">
             <div class="detail-item">
-              <span class="detail-label">Email:</span>
-              <span class="detail-value"><%= @doctor.email %></span>
-            </div>
-            <div class="detail-item">
               <span class="detail-label">Телефон:</span>
               <span class="detail-value"><%= @doctor.phone %></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Email:</span>
+              <span class="detail-value"><%= @doctor.email %></span>
             </div>
             <div class="detail-item">
               <span class="detail-label">Адреса:</span>
@@ -92,12 +99,12 @@
       <div class="appointments-nav">
         <h3><i class="fas fa-calendar-alt"></i> Управління записами</h3>
         <div class="appointments-filter">
-          <%= link_to "<i class='fas fa-folder-open'></i> Відкриті записи".html_safe, 
-                appointments_path, 
-                class: "btn filter-btn open-filter" %>
-          <%= link_to "<i class='fas fa-check-circle'></i> Закриті записи".html_safe, 
-                closed_appointments_path, 
-                class: "btn filter-btn closed-filter" %>
+          <%= link_to appointments_path, class: "btn filter-btn #{'active' unless params[:status] == 'closed'}" do %>
+            <i class="fas fa-folder-open"></i> Відкриті записи (<%= @doctor.appointments.open.count %>)
+          <% end %>
+          <%= link_to closed_appointments_path, class: "btn filter-btn #{'active' if params[:status] == 'closed'}" do %>
+            <i class="fas fa-check-circle"></i> Закриті записи (<%= @doctor.appointments.closed.count %>)
+          <% end %>
         </div>
       </div>
       
@@ -106,31 +113,32 @@
           <table class="appointments-table">
             <thead>
               <tr>
-                <th><i class="fas fa-user"></i> Пацієнт</th>
-                <th><i class="fas fa-info-circle"></i> Статус</th>
-                <th><i class="fas fa-comment-medical"></i> Рекомендація</th>
-                <th><i class="fas fa-calendar-day"></i> Дата</th>
-                <th><i class="fas fa-edit"></i> Дія</th>
+                <th>Пацієнт</th>
+                <th>Статус</th>
+                <th>Дата запису</th>
+                <th>Рекомендація</th>
+                <th>Дії</th>
               </tr>
             </thead>
             <tbody>
-              <% @appointments.each do |appt| %>
+              <% @appointments.order(created_at: :desc).each do |appt| %>
                 <tr>
-                  <td><%= appt.patient.full_name %></td>
                   <td>
-                    <% if appt.status == "open" %>
-                      <span class="status-badge waiting"><i class="fas fa-hourglass-half"></i> Очікує</span>
-                    <% else %>
-                      <span class="status-badge completed"><i class="fas fa-check"></i> Закрито</span>
-                    <% end %>
+                    <%= appt.patient.full_name %><br>
+                    <small class="text-muted"><%= appt.patient.phone %></small>
                   </td>
-                  <td><%= appt.recommendation.presence || "—" %></td>
-                  <td><%= l(appt.created_at, format: :short) %></td>
                   <td>
+                    <span class="status-badge <%= appt.status %>">
+                      <%= appt.status == "open" ? "Очікує" : "Закрито" %>
+                    </span>
+                  </td>
+                  <td><%= l(appt.created_at, format: :short) %></td>
+                  <td><%= appt.recommendation.presence || "—" %></td>
+                  <td class="actions">
                     <% if appt.open? %>
-                      <%= link_to "<i class='fas fa-plus-circle'></i> Додати".html_safe, 
-                            edit_appointment_path(appt), 
-                            class: "btn action-btn" %>
+                      <%= link_to edit_appointment_path(appt), class: "btn action-btn", title: "Додати рекомендацію" do %>
+                        <i class="fas fa-edit"></i>
+                      <% end %>
                     <% end %>
                   </td>
                 </tr>
@@ -183,6 +191,10 @@
     gap: 10px;
   }
   
+  .appointment-form {
+    margin: 0;
+  }
+  
   .appointment-btn {
     background-color: #4caf50;
     color: white;
@@ -199,6 +211,15 @@
   
   .appointment-btn:hover {
     background-color: #388e3c;
+    transform: translateY(-2px);
+  }
+  
+  .appointment-alert {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0.75rem 1.5rem;
   }
   
   .doctor-content {
@@ -252,6 +273,16 @@
     border: 1px solid #ffe0b2;
   }
   
+  .open {
+    background-color: #e3f2fd;
+    color: #1976d2;
+  }
+  
+  .closed {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+  
   .doctor-actions {
     display: flex;
     flex-direction: column;
@@ -281,16 +312,6 @@
   
   .edit-btn:hover {
     background-color: #bbdefb;
-  }
-  
-  .logout-btn {
-    background-color: #ffebee;
-    color: #d32f2f;
-    border: 1px solid #ffcdd2;
-  }
-  
-  .logout-btn:hover {
-    background-color: #ffcdd2;
   }
   
   .doctor-details {
@@ -370,24 +391,15 @@
   .filter-btn {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
+    border: 1px solid #e0e0e0;
+    background-color: #f5f5f5;
+    color: #424242;
   }
   
-  .open-filter {
-    background-color: #e3f2fd;
-    color: #1976d2;
-  }
-  
-  .open-filter:hover {
-    background-color: #bbdefb;
-  }
-  
-  .closed-filter {
-    background-color: #e8f5e9;
-    color: #388e3c;
-  }
-  
-  .closed-filter:hover {
-    background-color: #c8e6c9;
+  .filter-btn:hover, .filter-btn.active {
+    background-color: #1976d2;
+    color: white;
+    border-color: #1976d2;
   }
   
   .appointments-table-container {
@@ -428,21 +440,12 @@
     gap: 5px;
   }
   
-  .waiting {
-    background-color: #fff3e0;
-    color: #e65100;
-  }
-  
-  .completed {
-    background-color: #e8f5e9;
-    color: #2e7d32;
-  }
-  
   .action-btn {
     background-color: #e3f2fd;
     color: #1976d2;
     padding: 0.25rem 0.5rem;
     font-size: 0.8rem;
+    border: none;
   }
   
   .action-btn:hover {
@@ -488,3 +491,19 @@
     }
   }
 </style>
+
+<% content_for :javascript do %>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Підтвердження запису
+      const appointmentForms = document.querySelectorAll('.appointment-form');
+      appointmentForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+          if (!confirm('Ви впевнені, що хочете записатись до цього лікаря?')) {
+            e.preventDefault();
+          }
+        });
+      });
+    });
+  </script>
+<% end %>

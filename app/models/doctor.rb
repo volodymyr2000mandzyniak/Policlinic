@@ -10,7 +10,7 @@ class Doctor < ApplicationRecord
 
   # Максимум 10 відкритих записів
   def can_accept_new_appointment?
-    appointments.where(status: 'open').count < 10
+    appointments.open.count < 10
   end
 
   scope :approved, -> { where(approved: true) }
@@ -38,4 +38,5 @@ class Doctor < ApplicationRecord
       updated_at approved
     ]
   end
+
 end

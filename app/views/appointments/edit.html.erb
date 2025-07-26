@@ -1,18 +1,32 @@
-<%# app/views/appointments/edit.html.erb %>
 <div class="container mt-5">
   <h2 class="mb-4">Рекомендація для пацієнта</h2>
 
-  <div class="mb-3">
-    <strong>Пацієнт:</strong> <%= @appointment.patient.first_name  %>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Пацієнт: <%= @appointment.patient.full_name %></h5>
+      <p class="card-text">
+        <strong>Дата запису:</strong> <%= l(@appointment.created_at, format: :long) %>
+      </p>
+    </div>
   </div>
 
-  <%= form_with model: @appointment, url: appointment_path(@appointment), local: true do |f| %>
+  <%= form_with model: @appointment, url: appointment_path(@appointment), method: :patch, local: true do |f| %>
+    <% if @appointment.errors.any? %>
+      <div class="alert alert-danger">
+        <% @appointment.errors.full_messages.each do |message| %>
+          <div><%= message %></div>
+        <% end %>
+      </div>
+    <% end %>
+
     <div class="mb-3">
-      <%= f.label :recommendation, "Ваші рекомендації" %>
-      <%= f.text_area :recommendation, class: "form-control", rows: 6 %>
+      <%= f.label :recommendation, "Ваші рекомендації", class: "form-label" %>
+      <%= f.text_area :recommendation, class: "form-control", rows: 6, required: true %>
     </div>
 
-    <%= f.submit "Зберегти рекомендацію", class: "btn btn-primary" %>
-    <%= link_to "Назад", appointments_path, class: "btn btn-secondary ms-2" %>
+    <div class="d-grid gap-2 d-md-flex">
+      <%= f.submit "Зберегти рекомендацію", class: "btn btn-primary me-md-2" %>
+      <%= link_to "Назад", appointments_path, class: "btn btn-outline-secondary" %>
+    </div>
   <% end %>
 </div>
