@@ -1,131 +1,143 @@
-<div class="doctor-profile-container">
-  <div class="doctor-card">
-    <div class="doctor-header">
-      <h2><i class="fas fa-user-md"></i> Профіль лікаря</h2>
+<div class="doctor-profile">
+  <!-- Заголовок профілю -->
+  <div class="profile-header">
+    <div class="header-content">
+      <h1>
+        <i class="fas fa-user-md"></i>
+        Профіль лікаря
+      </h1>
+      
       <% if patient_signed_in? && @doctor.approved? %>
         <% if @doctor.can_accept_new_appointment? %>
-          <%= form_with url: appointments_path, method: :post, class: "appointment-form", scope: :appointment do |f| %>
-  <%= f.hidden_field :doctor_id, value: @doctor.id %>
-  <%= button_tag type: 'submit', class: "btn appointment-btn", data: { confirm: "Ви впевнені, що хочете записатись до цього лікаря?" } do %>
-    <i class='fas fa-calendar-plus'></i> Записатись на прийом
-  <% end %>
-<% end %>
+          <%= form_with model: Appointment.new, url: appointments_path, method: :post, local: true, class: "appointment-form" do |f| %>
+          <%= f.hidden_field :doctor_id, value: @doctor.id %>
+          <button type="submit" class="btn btn-primary" data-confirm="Ви впевнені, що хочете записатись до цього лікаря?">
+            <i class="fas fa-calendar-plus"></i> Записатись на прийом
+          </button>
+        <% end %>
 
         <% else %>
-          <div class="alert alert-warning appointment-alert">
+          <div class="alert alert-warning">
             <i class="fas fa-exclamation-circle"></i> Цей лікар зараз не приймає нових записів
           </div>
         <% end %>
       <% end %>
     </div>
-    <div class="doctor-actions">
-            <%= link_to "<i class='fas fa-edit'></i> Редагувати".html_safe, 
-                  edit_doctor_registration_path, 
-                  class: "btn edit-btn" %>
-            <%= button_to "<i class='fas fa-sign-out-alt'></i> Вийти".html_safe, 
-                  destroy_doctor_session_path, 
-                  method: :delete, 
-                  class: "btn logout-btn" %>
-          </div>
-    <div class="doctor-content">
-      <div class="doctor-avatar-section">
-        <%# <%= image_tag(avatar_for(@doctor), class: "doctor-avatar", alt: "Doctor Avatar") %> %>
-        
-        <% if doctor_signed_in? && current_doctor == @doctor %>
-          <div class="doctor-status">
-            <% if @doctor.approved? %>
-              <div class="status-badge approved">
-                <i class="fas fa-check-circle"></i> Профіль підтверджено
-              </div>
-            <% else %>
-              <div class="status-badge pending">
-                <i class="fas fa-clock"></i> Заявка на розгляді
-              </div>
-            <% end %>
-          </div>
-          
-          <div class="doctor-actions">
-            <%= link_to edit_doctor_registration_path, class: "btn edit-btn" do %>
-              <i class="fas fa-edit"></i> Редагувати профіль
-            <% end %>
-          </div>
-        <% end %>
-      </div>
+  </div>
+
+  <!-- Основна інформація -->
+  <div class="profile-main">
+    <div class="profile-sidebar">
+      <%# <%= image_tag(@doctor.avatar.attached? ? @doctor.avatar : "default_doctor.jpg", 
+                   class: "doctor-avatar", 
+                   alt: "Аватар лікаря") %>
       
-      <div class="doctor-details">
-        <div class="detail-section">
-          <h3><i class="fas fa-id-card"></i> Особисті дані</h3>
-          <div class="detail-grid">
-            <div class="detail-item">
-              <span class="detail-label">Повне ім'я:</span>
-              <span class="detail-value"><%= @doctor.full_name %></span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Дата народження:</span>
-              <span class="detail-value"><%= @doctor.date_of_birth.strftime("%d.%m.%Y") if @doctor.date_of_birth %></span>
-            </div>
-          </div>
+      <% if doctor_signed_in? && current_doctor == @doctor %>
+        <div class="profile-status <%= @doctor.approved? ? 'approved' : 'pending' %>">
+          <i class="fas fa-<%= @doctor.approved? ? 'check-circle' : 'clock' %>"></i>
+          <%= @doctor.approved? ? 'Профіль підтверджено' : 'Заявка на розгляді' %>
         </div>
         
-        <div class="detail-section">
-          <h3><i class="fas fa-address-book"></i> Контактна інформація</h3>
-          <div class="detail-grid">
-            <div class="detail-item">
-              <span class="detail-label">Телефон:</span>
-              <span class="detail-value"><%= @doctor.phone %></span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Email:</span>
-              <span class="detail-value"><%= @doctor.email %></span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Адреса:</span>
-              <span class="detail-value"><%= @doctor.address %></span>
-            </div>
-            <% if @doctor.category %>
-              <div class="detail-item">
-                <span class="detail-label">Спеціальність:</span>
-                <span class="detail-value"><%= @doctor.category.title %></span>
-              </div>
-            <% end %>
-          </div>
+        <div class="profile-actions">
+          <%= link_to edit_doctor_registration_path, class: "btn btn-edit" do %>
+            <i class="fas fa-edit"></i> Редагувати профіль
+          <% end %>
+          
+          <%= button_to destroy_doctor_session_path, 
+                      method: :delete, 
+                      class: "btn btn-logout",
+                      data: { confirm: "Ви впевнені, що хочете вийти?" } do %>
+            <i class="fas fa-sign-out-alt"></i> Вийти
+          <% end %>
         </div>
-      </div>
+      <% end %>
+    </div>
+    
+    <div class="profile-info">
+      <!-- Особисті дані -->
+      <section class="info-section">
+        <h2><i class="fas fa-id-card"></i> Особисті дані</h2>
+        <div class="info-grid">
+          <div class="info-item">
+            <span>Повне ім'я:</span>
+            <strong><%= @doctor.full_name %></strong>
+          </div>
+          <% if @doctor.date_of_birth %>
+            <div class="info-item">
+              <span>Дата народження:</span>
+              <strong><%= @doctor.date_of_birth.strftime("%d.%m.%Y") %></strong>
+            </div>
+          <% end %>
+        </div>
+      </section>
+      
+      <!-- Контактна інформація -->
+      <section class="info-section">
+        <h2><i class="fas fa-address-book"></i> Контактна інформація</h2>
+        <div class="info-grid">
+          <div class="info-item">
+            <span>Телефон:</span>
+            <strong><%= @doctor.phone %></strong>
+          </div>
+          <div class="info-item">
+            <span>Email:</span>
+            <strong><%= @doctor.email %></strong>
+          </div>
+          <% if @doctor.address.present? %>
+            <div class="info-item">
+              <span>Адреса:</span>
+              <strong><%= @doctor.address %></strong>
+            </div>
+          <% end %>
+          <% if @doctor.category %>
+            <div class="info-item">
+              <span>Спеціальність:</span>
+              <strong><%= @doctor.category.title %></strong>
+            </div>
+          <% end %>
+        </div>
+      </section>
     </div>
   </div>
-  
+
+  <!-- Секція записів (тільки для лікаря) -->
   <% if doctor_signed_in? && current_doctor == @doctor %>
     <div class="appointments-section">
-      <div class="appointments-nav">
-        <h3><i class="fas fa-calendar-alt"></i> Управління записами</h3>
-        <div class="appointments-filter">
-          <%= link_to appointments_path, class: "btn filter-btn #{'active' unless params[:status] == 'closed'}" do %>
-            <i class="fas fa-folder-open"></i> Відкриті записи (<%= @doctor.appointments.open.count %>)
+      <div class="section-header">
+        <h2><i class="fas fa-calendar-alt"></i> Управління записами</h2>
+        
+        <div class="appointment-filters">
+          <%= link_to appointments_path, 
+                    class: "filter-btn #{'active' unless params[:status] == 'closed'}" do %>
+            <i class="fas fa-folder-open"></i> Відкриті (<%= @doctor.appointments.open.count %>)
           <% end %>
-          <%= link_to closed_appointments_path, class: "btn filter-btn #{'active' if params[:status] == 'closed'}" do %>
-            <i class="fas fa-check-circle"></i> Закриті записи (<%= @doctor.appointments.closed.count %>)
+          
+          <%= link_to closed_appointments_path, 
+                    class: "filter-btn #{'active' if params[:status] == 'closed'}" do %>
+            <i class="fas fa-check-circle"></i> Закриті (<%= @doctor.appointments.closed.count %>)
           <% end %>
         </div>
       </div>
       
-      <div class="appointments-table-container">
-        <% if @appointments.any? %>
-          <table class="appointments-table">
+      <% if @appointments.any? %>
+        <div class="appointments-table">
+          <table>
             <thead>
               <tr>
+                <th>#</th>
                 <th>Пацієнт</th>
                 <th>Статус</th>
                 <th>Дата запису</th>
-                <th>Рекомендація</th>
                 <th>Дії</th>
               </tr>
             </thead>
             <tbody>
-              <% @appointments.order(created_at: :desc).each do |appt| %>
+              <% @appointments.each_with_index do |appt, index| %>
                 <tr>
+                  <td><%= index + 1 %></td>
                   <td>
-                    <%= appt.patient.full_name %><br>
-                    <small class="text-muted"><%= appt.patient.phone %></small>
+                    <%= appt.patient.full_name %>
+                    <small><%= appt.patient.phone %></small>
                   </td>
                   <td>
                     <span class="status-badge <%= appt.status %>">
@@ -133,10 +145,11 @@
                     </span>
                   </td>
                   <td><%= l(appt.created_at, format: :short) %></td>
-                  <td><%= appt.recommendation.presence || "—" %></td>
-                  <td class="actions">
+                  <td>
                     <% if appt.open? %>
-                      <%= link_to edit_appointment_path(appt), class: "btn action-btn", title: "Додати рекомендацію" do %>
+                      <%= link_to edit_appointment_path(appt), 
+                                class: "btn-action",
+                                title: "Додати рекомендацію" do %>
                         <i class="fas fa-edit"></i>
                       <% end %>
                     <% end %>
@@ -145,365 +158,336 @@
               <% end %>
             </tbody>
           </table>
-        <% else %>
-          <div class="no-appointments">
-            <i class="fas fa-calendar-times"></i>
-            <p>Записів поки що немає</p>
-          </div>
-        <% end %>
-      </div>
+        </div>
+      <% else %>
+        <div class="empty-state">
+          <i class="fas fa-calendar-times"></i>
+          <p>Записів поки що немає</p>
+        </div>
+      <% end %>
     </div>
   <% end %>
 </div>
 
 <style>
-  .doctor-profile-container {
+  /* Основний контейнер */
+  .doctor-profile {
     max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
   }
-  
-  .doctor-card {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-    margin-bottom: 2rem;
-  }
-  
-  .doctor-header {
+
+  /* Заголовок профілю */
+  .profile-header {
     background: linear-gradient(135deg, #1976d2, #0d47a1);
     color: white;
-    padding: 1.5rem;
+    padding: 20px;
+    border-radius: 10px 10px 0 0;
+    margin-bottom: 20px;
+  }
+
+  .header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 15px;
   }
-  
-  .doctor-header h2 {
+
+  .profile-header h1 {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 24px;
     display: flex;
     align-items: center;
     gap: 10px;
   }
-  
-  .appointment-form {
-    margin: 0;
-  }
-  
-  .appointment-btn {
-    background-color: #4caf50;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 5px;
-    font-size: 1rem;
+
+  /* Основна інформація */
+  .profile-main {
     display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
+    gap: 30px;
+    margin-bottom: 30px;
   }
-  
-  .appointment-btn:hover {
-    background-color: #388e3c;
-    transform: translateY(-2px);
-  }
-  
-  .appointment-alert {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0;
-    padding: 0.75rem 1.5rem;
-  }
-  
-  .doctor-content {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 1.5rem;
-  }
-  
-  .doctor-avatar-section {
-    flex: 0 0 250px;
+
+  .profile-sidebar {
+    flex: 0 0 300px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1rem;
+    gap: 20px;
   }
-  
+
   .doctor-avatar {
-    width: 180px;
-    height: 180px;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     object-fit: cover;
     border: 5px solid #e3f2fd;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   }
-  
-  .doctor-status {
-    width: 100%;
-    margin-bottom: 1.5rem;
-  }
-  
-  .status-badge {
-    padding: 0.5rem 1rem;
+
+  .profile-status {
+    padding: 10px 15px;
     border-radius: 5px;
-    font-size: 0.9rem;
+    font-weight: 500;
     display: flex;
     align-items: center;
     gap: 8px;
     width: 100%;
+    text-align: center;
   }
-  
-  .approved {
+
+  .profile-status.approved {
     background-color: #e8f5e9;
     color: #2e7d32;
-    border: 1px solid #c8e6c9;
   }
-  
-  .pending {
+
+  .profile-status.pending {
     background-color: #fff8e1;
     color: #ff8f00;
-    border: 1px solid #ffe0b2;
   }
-  
-  .open {
-    background-color: #e3f2fd;
-    color: #1976d2;
-  }
-  
-  .closed {
-    background-color: #e8f5e9;
-    color: #2e7d32;
-  }
-  
-  .doctor-actions {
+
+  .profile-actions {
     display: flex;
     flex-direction: column;
     gap: 10px;
     width: 100%;
   }
-  
+
   .btn {
-    padding: 0.5rem 1rem;
+    padding: 10px 15px;
     border-radius: 5px;
-    font-size: 0.9rem;
+    font-weight: 500;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    border: none;
     cursor: pointer;
+    transition: all 0.3s ease;
   }
-  
-  .edit-btn {
-    background-color: #e3f2fd;
-    color: #1976d2;
-    border: 1px solid #bbdefb;
+
+  .btn-primary {
+    background-color: #4caf50;
+    color: white;
+    border: none;
   }
-  
-  .edit-btn:hover {
-    background-color: #bbdefb;
+
+  .btn-primary:hover {
+    background-color: #388e3c;
+    transform: translateY(-2px);
   }
-  
-  .doctor-details {
+
+  .btn-edit {
+    background-color: #2196f3;
+    color: white;
+    text-decoration: none;
+  }
+
+  .btn-edit:hover {
+    background-color: #1976d2;
+  }
+
+  .btn-logout {
+    background-color: #f44336;
+    color: white;
+    border: none;
+  }
+
+  .btn-logout:hover {
+    background-color: #d32f2f;
+  }
+
+  /* Інформаційні секції */
+  .profile-info {
     flex: 1;
-    min-width: 300px;
-    padding: 1rem;
   }
-  
-  .detail-section {
-    margin-bottom: 1.5rem;
+
+  .info-section {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   }
-  
-  .detail-section h3 {
+
+  .info-section h2 {
     color: #1976d2;
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
     border-bottom: 1px solid #e0e0e0;
     display: flex;
     align-items: center;
     gap: 10px;
   }
-  
-  .detail-grid {
+
+  .info-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1rem;
+    gap: 15px;
   }
-  
-  .detail-item {
+
+  .info-item {
     display: flex;
     flex-direction: column;
   }
-  
-  .detail-label {
-    font-weight: 600;
-    color: #424242;
-    font-size: 0.9rem;
+
+  .info-item span {
+    color: #757575;
+    font-size: 14px;
   }
-  
-  .detail-value {
-    color: #616161;
-    word-break: break-word;
+
+  .info-item strong {
+    color: #212121;
+    font-size: 16px;
   }
-  
+
+  /* Секція записів */
   .appointments-section {
     background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    padding: 1.5rem;
-    margin-bottom: 2rem;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   }
-  
-  .appointments-nav {
+
+  .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+    gap: 15px;
+    margin-bottom: 20px;
   }
-  
-  .appointments-nav h3 {
-    color: #1976d2;
-    font-size: 1.3rem;
+
+  .section-header h2 {
     margin: 0;
+    color: #1976d2;
     display: flex;
     align-items: center;
     gap: 10px;
   }
-  
-  .appointments-filter {
+
+  .appointment-filters {
     display: flex;
     gap: 10px;
   }
-  
+
   .filter-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    border: 1px solid #e0e0e0;
-    background-color: #f5f5f5;
+    padding: 8px 15px;
+    border-radius: 5px;
+    background: #f5f5f5;
     color: #424242;
-  }
-  
-  .filter-btn:hover, .filter-btn.active {
-    background-color: #1976d2;
-    color: white;
-    border-color: #1976d2;
-  }
-  
-  .appointments-table-container {
-    overflow-x: auto;
-  }
-  
-  .appointments-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.9rem;
-  }
-  
-  .appointments-table th {
-    background-color: #f5f5f5;
-    padding: 0.75rem 1rem;
-    text-align: left;
-    font-weight: 600;
-    color: #424242;
-    white-space: nowrap;
-  }
-  
-  .appointments-table td {
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid #e0e0e0;
-    vertical-align: middle;
-  }
-  
-  .appointments-table tr:hover {
-    background-color: #f9f9f9;
-  }
-  
-  .status-badge {
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    display: inline-flex;
+    text-decoration: none;
+    display: flex;
     align-items: center;
     gap: 5px;
+    transition: all 0.3s ease;
   }
-  
-  .action-btn {
+
+  .filter-btn:hover, .filter-btn.active {
+    background: #1976d2;
+    color: white;
+  }
+
+  /* Таблиця записів */
+  .appointments-table {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+    color: #424242;
+  }
+
+  tr:hover {
+    background-color: #f9f9f9;
+  }
+
+  .status-badge {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .status-badge.open {
     background-color: #e3f2fd;
     color: #1976d2;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.8rem;
+  }
+
+  .status-badge.closed {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  .btn-action {
+    background: transparent;
     border: none;
+    color: #1976d2;
+    cursor: pointer;
+    font-size: 16px;
   }
-  
-  .action-btn:hover {
-    background-color: #bbdefb;
-  }
-  
-  .no-appointments {
+
+  /* Пустий стан */
+  .empty-state {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: 40px;
     color: #757575;
   }
-  
-  .no-appointments i {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: #bdbdbd;
+
+  .empty-state i {
+    font-size: 48px;
+    margin-bottom: 15px;
+    color: #e0e0e0;
   }
-  
-  @media (max-width: 768px) {
-    .doctor-content {
+
+  /* Адаптивність */
+  @media (max-width: 992px) {
+    .profile-main {
       flex-direction: column;
     }
     
-    .doctor-avatar-section {
-      flex: 1;
+    .profile-sidebar {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
     }
     
-    .appointments-nav {
+    .profile-actions {
+      flex-direction: row;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .header-content {
       flex-direction: column;
       align-items: flex-start;
     }
     
-    .appointments-filter {
+    .appointment-filters {
       width: 100%;
-      flex-direction: column;
     }
     
     .filter-btn {
-      width: 100%;
+      flex: 1;
+      justify-content: center;
     }
   }
 </style>
-
-<% content_for :javascript do %>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Підтвердження запису
-      const appointmentForms = document.querySelectorAll('.appointment-form');
-      appointmentForms.forEach(form => {
-        form.addEventListener('submit', function(e) {
-          if (!confirm('Ви впевнені, що хочете записатись до цього лікаря?')) {
-            e.preventDefault();
-          }
-        });
-      });
-    });
-  </script>
-<% end %>

@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resources :appointments, except: [:new, :destroy] do
   collection do
     get :closed
+    get :open
     get :my_open
     get :my_closed
   end

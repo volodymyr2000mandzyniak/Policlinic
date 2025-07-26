@@ -35,7 +35,9 @@
               <li><%= link_to "Мій профіль", doctor_path(current_doctor), class: "dropdown-item" %></li>
               <li><%= link_to "Мої записи", appointments_path, class: "dropdown-item" %></li>
               <li><hr class="dropdown-divider"></li>
-              <li><%= link_to "Вийти", destroy_doctor_session_path, method: :delete, class: "dropdown-item" %></li>
+              <li><%= button_to "Вийти", destroy_doctor_session_path, method: :delete, class: "dropdown-item" %></li>
+
+
             </ul>
           </div>
         <% elsif patient_signed_in? %>
@@ -48,7 +50,7 @@
               <li><%= link_to "Мій профіль", patient_path(current_patient), class: "dropdown-item" %></li>
               <li><%= link_to "Мої записи", my_open_appointments_path, class: "dropdown-item" %></li>
               <li><hr class="dropdown-divider"></li>
-              <li><%= link_to "Вийти", destroy_patient_session_path, method: :delete, class: "dropdown-item" %></li>
+              <li><%= button_to "Вийти", destroy_patient_session_path, method: :delete, class: "dropdown-item" %></li>
             </ul>
           </div>
         <% else %>
