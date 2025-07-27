@@ -4,6 +4,7 @@ class Appointment < ApplicationRecord
 
   validates :status, inclusion: { in: %w[open closed] }
   validates :recommendation, presence: true, if: :closed?
+
   validate :doctor_availability, on: :create
 
   enum status: { open: 'open', closed: 'closed' }
@@ -14,7 +15,6 @@ class Appointment < ApplicationRecord
 
   def doctor_availability
     return unless doctor && status == 'open'
-
     unless doctor.can_accept_new_appointment?
       errors.add(:base, 'Лікар вже має максимальну кількість відкритих записів (10)')
     end

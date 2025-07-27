@@ -5,21 +5,19 @@ class Doctor < ApplicationRecord
   belongs_to :category
   has_many :appointments, dependent: :nullify
   has_many :patients, through: :appointments
+  has_one_attached :photo
 
   validates :phone, presence: true, uniqueness: true
 
-  # Максимум 10 відкритих записів
   def can_accept_new_appointment?
     appointments.open.count < 10
   end
-
 
   scope :approved, -> { where(approved: true) }
 
   def free_appointment_slots
     [10 - appointments.open.count, 0].max
   end
-
 
   def approved?
     approved == true
@@ -44,5 +42,4 @@ class Doctor < ApplicationRecord
       updated_at approved
     ]
   end
-
 end

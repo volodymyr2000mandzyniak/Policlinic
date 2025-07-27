@@ -3,16 +3,29 @@
     <div class="profile-header">
       <h2><i class="fas fa-user-circle"></i> Медична картка пацієнта</h2>
     </div>
-    
+
     <div class="profile-content">
       <div class="avatar-section">
-        <%= image_tag("https://randomuser.me/api/portraits/men/#{rand(1..80)}.jpg", class: "patient-avatar", alt: "Patient Avatar") %>
+        <% if @patient.photo.attached? %>
+          <%= image_tag @patient.photo, class: "patient-avatar", alt: "Patient Avatar" %>
+        <% else %>
+          <%= image_tag "https://randomuser.me/api/portraits/men/#{rand(1..80)}.jpg", class: "patient-avatar", alt: "Patient Avatar" %>
+        <% end %>
+
+        <!-- Photo Upload Form -->
+        <%= form_with model: @patient, url: update_photo_patient_path(@patient), method: :patch, local: true, class: "avatar-form" do |f| %>
+          <%= f.file_field :photo, class: "d-none", id: "avatar-upload" %>
+          <%= f.label :photo, for: "avatar-upload", class: "btn edit-btn" do %>
+            <i class="fas fa-camera"></i> Додати фото
+          <% end %>
+        <% end %>
+
         <div class="profile-actions">
           <%= link_to "<i class='fas fa-edit'></i> Редагувати".html_safe, edit_patient_registration_path, class: "btn edit-btn" %>
           <%= button_to "<i class='fas fa-sign-out-alt'></i> Вийти".html_safe, destroy_patient_session_path, method: :delete, class: "btn logout-btn" %>
         </div>
       </div>
-      
+
       <div class="profile-details">
         <div class="detail-section">
           <h3><i class="fas fa-id-card"></i> Особисті дані</h3>
@@ -29,7 +42,7 @@
             <span class="detail-value"><%= @patient.date_of_birth.strftime("%d.%m.%Y") if @patient.date_of_birth %></span>
           </div>
         </div>
-        
+
         <div class="detail-section">
           <h3><i class="fas fa-address-book"></i> Контактна інформація</h3>
           <div class="detail-row">
@@ -48,7 +61,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="appointments-section">
     <h3><i class="fas fa-calendar-alt"></i> Ваші медичні записи</h3>
     <div class="appointments-actions">
@@ -65,7 +78,7 @@
     padding: 0 1rem;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
-  
+
   .profile-card {
     background: white;
     border-radius: 10px;
@@ -73,13 +86,13 @@
     overflow: hidden;
     margin-bottom: 2rem;
   }
-  
+
   .profile-header {
     background: linear-gradient(135deg, #1976d2, #0d47a1);
     color: white;
     padding: 1.5rem;
   }
-  
+
   .profile-header h2 {
     margin: 0;
     font-size: 1.5rem;
@@ -87,13 +100,13 @@
     align-items: center;
     gap: 10px;
   }
-  
+
   .profile-content {
     display: flex;
     flex-wrap: wrap;
     padding: 1.5rem;
   }
-  
+
   .avatar-section {
     flex: 0 0 250px;
     display: flex;
@@ -101,7 +114,7 @@
     align-items: center;
     padding: 1rem;
   }
-  
+
   .patient-avatar {
     width: 180px;
     height: 180px;
@@ -110,14 +123,14 @@
     border: 5px solid #e3f2fd;
     margin-bottom: 1.5rem;
   }
-  
+
   .profile-actions {
     display: flex;
     flex-direction: column;
     gap: 10px;
     width: 100%;
   }
-  
+
   .btn {
     padding: 0.5rem 1rem;
     border-radius: 5px;
@@ -131,37 +144,37 @@
     border: none;
     cursor: pointer;
   }
-  
+
   .edit-btn {
     background-color: #e3f2fd;
     color: #1976d2;
     border: 1px solid #bbdefb;
   }
-  
+
   .edit-btn:hover {
     background-color: #bbdefb;
   }
-  
+
   .logout-btn {
     background-color: #ffebee;
     color: #d32f2f;
     border: 1px solid #ffcdd2;
   }
-  
+
   .logout-btn:hover {
     background-color: #ffcdd2;
   }
-  
+
   .profile-details {
     flex: 1;
     min-width: 300px;
     padding: 1rem;
   }
-  
+
   .detail-section {
     margin-bottom: 1.5rem;
   }
-  
+
   .detail-section h3 {
     color: #1976d2;
     font-size: 1.2rem;
@@ -172,30 +185,30 @@
     align-items: center;
     gap: 10px;
   }
-  
+
   .detail-row {
     display: flex;
     margin-bottom: 0.8rem;
     line-height: 1.5;
   }
-  
+
   .detail-label {
     font-weight: 600;
     color: #424242;
     min-width: 150px;
   }
-  
+
   .detail-value {
     color: #616161;
   }
-  
+
   .appointments-section {
     background: white;
     border-radius: 10px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     padding: 1.5rem;
   }
-  
+
   .appointments-section h3 {
     color: #1976d2;
     font-size: 1.3rem;
@@ -205,48 +218,63 @@
     align-items: center;
     gap: 10px;
   }
-  
+
   .appointments-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
   }
-  
+
   .appointments-btn {
     padding: 0.7rem 1.2rem;
     font-size: 1rem;
   }
-  
+
   .open-btn {
     background-color: #e3f2fd;
     color: #1976d2;
   }
-  
+
   .open-btn:hover {
     background-color: #bbdefb;
   }
-  
+
   .closed-btn {
     background-color: #e8f5e9;
     color: #388e3c;
   }
-  
+
   .closed-btn:hover {
     background-color: #c8e6c9;
   }
-  
+
+  .d-none {
+    display: none;
+  }
+
   @media (max-width: 768px) {
     .profile-content {
       flex-direction: column;
     }
-    
+
     .avatar-section {
       flex: 1;
     }
-    
+
     .profile-actions {
       flex-direction: row;
       margin-bottom: 1rem;
     }
   }
 </style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const avatarUpload = document.getElementById('avatar-upload');
+    if (avatarUpload) {
+      avatarUpload.addEventListener('change', function() {
+        this.form.submit();
+      });
+    }
+  });
+</script>

@@ -4,9 +4,31 @@
       <h2><i class="fas fa-user-md"></i> Редагування профілю лікаря</h2>
     </div>
     
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "edit-profile-form" }) do |f| %>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "edit-profile-form", multipart: true }) do |f| %>
       <%= render "doctors/shared/error_messages", resource: resource %>
       
+      <!-- Секція фото профілю -->
+      <div class="form-section">
+        <h3><i class="fas fa-camera"></i> Фото профілю</h3>
+        
+        <div class="avatar-edit-container">
+          <% if resource.photo.attached? %>
+            <%= image_tag resource.photo, class: "doctor-avatar" %>
+          <% else %>
+            <div class="default-avatar">
+              <i class="fas fa-user-md"></i>
+            </div>
+          <% end %>
+          
+          <div class="form-group">
+            <%= f.label :photo, "Змінити фото", class: "form-label" %>
+            <%= f.file_field :photo, class: "form-control", accept: "image/*" %>
+            <small class="form-text">Рекомендований розмір: 500x500 пікселів</small>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Решта форми -->
       <div class="form-section">
         <h3><i class="fas fa-id-card"></i> Особисті дані</h3>
         
@@ -161,6 +183,36 @@
     gap: 10px;
   }
   
+  /* Стилі для аватара */
+  .avatar-edit-container {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .doctor-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #e3f2fd;
+  }
+  
+  .default-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #e3f2fd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    color: #1976d2;
+    border: 3px solid #e3f2fd;
+  }
+  
+  /* Решта стилів */
   .form-row {
     display: flex;
     gap: 20px;
@@ -283,6 +335,12 @@
   }
   
   @media (max-width: 768px) {
+    .avatar-edit-container {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
+    
     .form-row {
       flex-direction: column;
       gap: 0;

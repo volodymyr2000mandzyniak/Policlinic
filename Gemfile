@@ -23,6 +23,9 @@ gem "bootsnap", require: false
 gem 'activeadmin'
 gem 'cancancan'
 
+gem "image_processing"
+
+
 gem 'faker'
 
 group :development, :test do

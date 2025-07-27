@@ -22,20 +22,11 @@ class Ability
   end
 
   def doctor_abilities(doctor)
-    # Лікар може читати і редагувати свій профіль
-    can [:read, :update], Doctor, id: doctor.id
-
-    # Лікар може бачити свої записи
+    can :read, Doctor
+    can [:update, :update_photo], Doctor, id: doctor.id
     can :read, Appointment, doctor_id: doctor.id
-
-    # Лікар може оновлювати записи зі статусом "open"
     can :update, Appointment, doctor_id: doctor.id, status: 'open'
-
-    # Лікар може створювати рекомендації — у вас це поле у Appointment,
-    # тож лікар може оновлювати поле recommendation у своїх Appointment
     can :update, Appointment, doctor_id: doctor.id
-
-    # Лікар може читати пацієнтів, які записані до нього
     can :read, Patient do |patient|
       Appointment.exists?(doctor_id: doctor.id, patient_id: patient.id)
     end
@@ -44,19 +35,8 @@ class Ability
   def patient_abilities(patient)
     can :read, Doctor
     can :read, Category
-
     can :create, Appointment
-    can [:read], Appointment, patient_id: patient.id
-
-    # Пацієнт може читати свої рекомендації (через поле recommendation в Appointment)
     can :read, Appointment, patient_id: patient.id
-
-    can [:read, :update], Patient, id: patient.id
-  end
-
-  def guest_abilities
-    # Права для гостей (незареєстрованих)
-    can :read, Doctor
-    can :read, Category
+    can [:read, :update, :update_photo], Patient, id: patient.id
   end
 end
