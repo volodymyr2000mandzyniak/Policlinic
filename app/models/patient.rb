@@ -6,6 +6,8 @@ class Patient < ApplicationRecord
 
   has_many :appointments, dependent: :nullify
   has_many :doctors, through: :appointments
+  has_one_attached :photo
+
 
 
   def email_required?; false; end
