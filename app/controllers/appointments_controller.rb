@@ -65,10 +65,8 @@ class AppointmentsController < ApplicationController
 
   def appointment_params
     if current_doctor
-      # Лікар може оновити recommendation
       params.require(:appointment).permit(:recommendation)
     else
-      # Пацієнт лише створює запис, передає тільки doctor_id
       params.require(:appointment).permit(:doctor_id)
     end
   end
