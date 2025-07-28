@@ -2,7 +2,7 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    user ||= Patient.new(role: 'guest')
+    return unless user
 
     if user.is_a?(AdminUser)
       admin_abilities
@@ -10,8 +10,6 @@ class Ability
       doctor_abilities(user)
     elsif user.is_a?(Patient)
       patient_abilities(user)
-    else
-      guest_abilities
     end
   end
 
@@ -25,7 +23,6 @@ class Ability
     can :read, Doctor
     can [:update, :update_photo], Doctor, id: doctor.id
     can :read, Appointment, doctor_id: doctor.id
-    can :update, Appointment, doctor_id: doctor.id, status: 'open'
     can :update, Appointment, doctor_id: doctor.id
     can :read, Patient do |patient|
       Appointment.exists?(doctor_id: doctor.id, patient_id: patient.id)

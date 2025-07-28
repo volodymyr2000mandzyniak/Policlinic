@@ -1,0 +1,19 @@
+require 'rails_helper'
+
+RSpec.describe "Doctors index", type: :request do
+  let(:doctor) { create(:doctor) }
+  let(:category) { create(:category) }
+
+  before { sign_in doctor }
+
+  it "returns http success" do
+    get doctors_path
+    expect(response).to have_http_status(:success)
+  end
+
+  it "filters by category_id" do
+    doctor.update(category: category)
+    get doctors_path, params: { category_id: category.id }
+    expect(response.body).to include(doctor.first_name)
+  end
+end
