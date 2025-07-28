@@ -26,13 +26,14 @@ gem 'cancancan'
 gem "image_processing"
 
 gem 'faker'
+gem 'dotenv-rails'
+
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
   gem "brakeman", require: false
   gem "rubocop-rails-omakase", require: false
   
-  # Додано для RSpec
   gem 'rspec-rails', '~> 6.1'
   gem 'rails-controller-testing'
   gem 'factory_bot_rails'
