@@ -1,7 +1,6 @@
 <div class="patient-login-page">
   <div class="container">
     <div class="row align-items-center g-4 g-lg-5 py-3 py-lg-5">
-      <!-- Ліва частина - інформація -->
       <div class="col-lg-7 text-center text-lg-start">
         <div class="patient-content-wrapper">
           <h1 class="patient-welcome-title">Ласкаво просимо до системи електронного здоров'я</h1>
@@ -45,7 +44,6 @@
         </div>
       </div>
       
-      <!-- Права частина - форма входу -->
       <div class="col-md-10 mx-auto col-lg-5">
         <div class="patient-login-form">
           <div class="form-header">
@@ -366,7 +364,7 @@
   }
   
   .social-btn:hover {
-    background-color: #f8fafc;
+    background-color: #f8fafc";
     transform: translateY(-1px);
   }
   
@@ -394,7 +392,6 @@
     text-decoration: underline;
   }
   
-  /* Анімації */
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -408,7 +405,6 @@
   .benefit-item:nth-child(2) { animation: fadeIn 0.6s ease-out 0.2s forwards; opacity: 0; }
   .benefit-item:nth-child(3) { animation: fadeIn 0.6s ease-out 0.3s forwards; opacity: 0; }
   
-  /* Адаптація для мобільних */
   @media (max-width: 991.98px) {
     .patient-login-page {
       padding-top: 3rem;
@@ -448,7 +444,6 @@
 </style>
 
 <script>
-  // Функція для перемикання видимості пароля
   document.querySelectorAll('.password-toggle').forEach(button => {
     button.addEventListener('click', function() {
       const passwordInput = this.closest('.form-floating').querySelector('input');
@@ -466,7 +461,6 @@
     });
   });
   
-  // Маска для телефону
   const phoneInput = document.getElementById('phone');
   if (phoneInput) {
     phoneInput.addEventListener('input', function(e) {
@@ -474,4 +468,24 @@
       e.target.value = !x[2] ? x[1] : x[1] + ' ' + x[2] + (x[3] ? ' ' + x[3] : '');
     });
   }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        const phoneField = document.getElementById('phone');
+        if (phoneField) {
+          phoneField.value = phoneField.value.replace(/\D/g, '');
+          
+          if (phoneField.value.length < 10) {
+            e.preventDefault();
+            alert('Будь ласка, введіть коректний номер телефону (не менше 10 цифр)');
+            phoneField.focus();
+            return false;
+          }
+        }
+        return true;
+      });
+    }
+  });
 </script>
