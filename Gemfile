@@ -34,6 +34,7 @@ group :development, :test do
   
   # Додано для RSpec
   gem 'rspec-rails', '~> 6.1'
+  gem 'rails-controller-testing'
   gem 'factory_bot_rails'
 end
 
