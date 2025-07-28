@@ -7,8 +7,8 @@ class Appointment < ApplicationRecord
 
   validate :doctor_availability, on: :create
 
-  enum status: { open: 'open', closed: 'closed' }
-
+  enum :status, { open: "open", closed: "closed" }
+  
   scope :recent, -> { order(created_at: :desc) }
 
   private

@@ -14,8 +14,8 @@ class Patient < ApplicationRecord
   def email_changed?; false; end
 
   def full_name
-  [first_name, last_name].compact.join(" ")
-end
+    [first_name, last_name].compact.join(" ")
+  end
 
 
   def self.ransackable_attributes(auth_object = nil)
