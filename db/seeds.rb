@@ -93,12 +93,11 @@ puts "✅ Пацієнти створені успішно!"
 # puts "✅ Записи на прийом створені успішно!"
 
 # Створення адміністратора
-if Rails.env.development?
-  AdminUser.find_or_create_by!(email: 'admin@example.com') do |admin|
-    admin.password = 'password'
-    admin.password_confirmation = 'password'
-  end
-  puts "✅ Тестовий адміністратор створений (admin@example.com / password)"
+AdminUser.find_or_create_by!(email: 'admin@example.com') do |admin|
+  admin.password = 'password'
+  admin.password_confirmation = 'password'
 end
+puts "✅ Адміністратор створений (admin@example.com / password)"
+
 
 puts "🎉 Базу даних успішно заповнено тестовими даними!"
