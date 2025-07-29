@@ -13,6 +13,7 @@ gem 'rake'
 
 gem 'rubygems-update', '3.3.22'
 
+gem 'nokogiri', '~> 1.18.9'
 
 
 # Frontend
