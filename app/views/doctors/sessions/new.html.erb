@@ -1,39 +1,37 @@
+<!-- app/views/doctors/sessions/new.html.erb -->
 <div class="doctor-login-page">
   <div class="container">
     <div class="row align-items-center g-4 g-lg-5 py-4 py-lg-5">
-      <!-- Ліва частина - інформація -->
       <div class="col-lg-7 text-center text-lg-start">
         <div class="doctor-content-wrapper">
           <h1 class="doctor-welcome-title">Професійний портал для лікарів</h1>
           <p class="doctor-description">
             Доступ до ваших медичних інструментів та пацієнтської бази. Увійдіть за допомогою
-            вашого номеру телефону та паролю для повного доступу до системи.
+            вашого номера телефону та паролю для повного доступу до системи.
           </p>
           
           <div class="doctor-benefits mt-4">
             <div class="benefit-card">
               <div class="benefit-icon-wrapper bg-blue-50">
-                <i class="fas fa-notes-medical text-blue-600" aria-hidden="true"></i>
+                <i class="fas fa-notes-medical text-blue-600"></i>
               </div>
               <div class="benefit-text">
                 <h3>Медичні записи</h3>
                 <p>Швидкий доступ до історії хвороб пацієнтів</p>
               </div>
             </div>
-            
             <div class="benefit-card">
               <div class="benefit-icon-wrapper bg-green-50">
-                <i class="fas fa-clock text-green-600" aria-hidden="true"></i>
+                <i class="fas fa-clock text-green-600"></i>
               </div>
               <div class="benefit-text">
                 <h3>Розклад прийомів</h3>
                 <p>Керування вашим робочим графіком онлайн</p>
               </div>
             </div>
-            
             <div class="benefit-card">
               <div class="benefit-icon-wrapper bg-purple-50">
-                <i class="fas fa-prescription-bottle-alt text-purple-600" aria-hidden="true"></i>
+                <i class="fas fa-prescription-bottle-alt text-purple-600"></i>
               </div>
               <div class="benefit-text">
                 <h3>Електронні рецепти</h3>
@@ -43,42 +41,35 @@
           </div>
         </div>
       </div>
-      
-      <!-- Права частина - форма входу -->
+
       <div class="col-md-10 mx-auto col-lg-5">
         <div class="doctor-login-card">
           <div class="card-header">
             <h2 class="card-title">Вхід для лікарів</h2>
             <p class="card-subtitle">Введіть номер телефону та пароль</p>
           </div>
-          
           <div class="card-body">
             <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
               <div class="form-group mb-3">
                 <label for="doctorPhone" class="form-label">Номер телефону</label>
                 <div class="input-group">
-                  <span class="input-group-text">
-                    <i class="fas fa-mobile-alt" aria-hidden="true"></i>
-                  </span>
-                  <%= f.text_field :phone, autofocus: true, class: "form-control", id: "doctorPhone", 
-                      placeholder: "097 123 4567", inputmode: "tel" %>
+                  <span class="input-group-text">+380</span>
+                <%= f.text_field :phone, value: "", class: "form-control", id: "doctorPhone", placeholder: "000000000", maxlength: 9 %>
+
                 </div>
               </div>
-              
+
               <div class="form-group mb-3">
                 <label for="doctorPassword" class="form-label">Пароль</label>
                 <div class="input-group">
-                  <span class="input-group-text">
-                    <i class="fas fa-lock" aria-hidden="true"></i>
-                  </span>
-                  <%= f.password_field :password, class: "form-control", id: "doctorPassword", 
-                      placeholder: "••••••••", autocomplete: "current-password" %>
+                  <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                  <%= f.password_field :password, class: "form-control", id: "doctorPassword", placeholder: "••••••••", autocomplete: "current-password" %>
                   <button class="btn btn-outline-secondary password-toggle" type="button">
-                    <i class="fas fa-eye" aria-hidden="true"></i>
+                    <i class="fas fa-eye"></i>
                   </button>
                 </div>
               </div>
-              
+
               <div class="d-flex justify-content-between align-items-center mb-4">
                 <% if devise_mapping.rememberable? %>
                   <div class="form-check">
@@ -86,18 +77,15 @@
                     <label class="form-check-label" for="rememberMe">Запам'ятати мене</label>
                   </div>
                 <% end %>
-                
-                <%= link_to "Забули пароль?", new_password_path(resource_name), 
-                    class: "text-sm text-primary-600 hover:text-primary-800" %>
+                <%= link_to "Забули пароль?", new_password_path(resource_name), class: "text-sm text-primary-600 hover:text-primary-800" %>
               </div>
-              
+
               <%= f.button "Увійти", class: "w-100 btn btn-primary btn-lg", type: "submit" %>
-              
+
               <div class="alternative-options mt-3">
                 <p class="text-center text-sm text-gray-600">
-                  Немає облікового запису? 
-                  <%= link_to "Зареєструватись", new_registration_path(resource_name), 
-                      class: "font-medium text-primary-600 hover:text-primary-800" %>
+                  Немає облікового запису?
+                  <%= link_to "Зареєструватись", new_registration_path(resource_name), class: "font-medium text-primary-600 hover:text-primary-800" %>
                 </p>
               </div>
             <% end %>
@@ -108,350 +96,38 @@
   </div>
 </div>
 
-<style>
-  /* Стилі залишаються такими ж як у попередній версії */
-  :root {
-    --primary-50: #eff6ff;
-    --primary-100: #dbeafe;
-    --primary-200: #bfdbfe;
-    --primary-300: #93c5fd;
-    --primary-400: #60a5fa;
-    --primary-500: #3b82f6;
-    --primary-600: #2563eb;
-    --primary-700: #1d4ed8;
-    --primary-800: #1e40af;
-    --primary-900: #1e3a8a;
-    --gray-50: #f9fafb;
-    --gray-100: #f3f4f6;
-    --gray-200: #e5e7eb;
-    --gray-300: #d1d5db;
-    --gray-400: #9ca3af;
-    --gray-500: #6b7280;
-    --gray-600: #4b5563;
-    --gray-700: #374151;
-    --gray-800: #1f2937;
-    --gray-900: #111827;
-    --blue-50: #eff6ff;
-    --blue-600: #2563eb;
-    --green-50: #ecfdf5;
-    --green-600: #059669;
-    --purple-50: #f5f3ff;
-    --purple-600: #7c3aed;
-    --doctor-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --doctor-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --doctor-rounded: 0.5rem;
-    --doctor-transition: all 0.15s ease-in-out;
-  }
-  
-  .doctor-login-page {
-    min-height: 100vh;
-    padding: 1rem;
-    background-color: var(--gray-50);
-    background-image: 
-      radial-gradient(at top right, rgba(37, 99, 235, 0.05) 0%, transparent 50%),
-      radial-gradient(at bottom left, rgba(37, 99, 235, 0.05) 0%, transparent 50%);
-    display: flex;
-    align-items: center;
-  }
-  
-  /* Інші стилі залишаються незмінними */
-  .doctor-content-wrapper {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 1rem;
-  }
-  
-  @media (min-width: 992px) {
-    .doctor-content-wrapper {
-      margin: 0;
-      padding: 0 2rem 0 0;
-    }
-  }
-  
-  .doctor-welcome-title {
-    font-weight: 800;
-    color: var(--gray-900);
-    margin-bottom: 1.5rem;
-    font-size: clamp(1.75rem, 5vw, 2.5rem);
-    line-height: 1.2;
-  }
-  
-  .doctor-description {
-    font-size: 1.125rem;
-    line-height: 1.75;
-    color: var(--gray-600);
-    margin-bottom: 2rem;
-  }
-  
-  .doctor-login-card {
-    background: white;
-    border-radius: var(--doctor-rounded);
-    box-shadow: var(--doctor-shadow-md);
-    overflow: hidden;
-  }
-  
-  .card-header {
-    padding: 1.5rem 1.5rem 0;
-    text-align: center;
-  }
-  
-  .card-title {
-    font-weight: 700;
-    color: var(--gray-900);
-    margin-bottom: 0.5rem;
-    font-size: 1.5rem;
-  }
-  
-  .card-subtitle {
-    color: var(--gray-500);
-    font-size: 0.875rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .card-body {
-    padding: 1.5rem;
-  }
-  
-  .form-group {
-    margin-bottom: 1rem;
-  }
-  
-  .form-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var(--gray-700);
-    font-size: 0.875rem;
-    font-weight: 500;
-  }
-  
-  .input-group {
-    position: relative;
-    display: flex;
-    align-items: stretch;
-    width: 100%;
-  }
-  
-  .input-group-text {
-    display: flex;
-    align-items: center;
-    padding: 0.5rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: var(--gray-500);
-    text-align: center;
-    white-space: nowrap;
-    background-color: var(--gray-50);
-    border: 1px solid var(--gray-300);
-    border-radius: var(--doctor-rounded) 0 0 var(--doctor-rounded);
-  }
-  
-  .form-control {
-    position: relative;
-    flex: 1 1 auto;
-    width: 1%;
-    min-width: 0;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.875rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: var(--gray-900);
-    background-color: white;
-    background-clip: padding-box;
-    border: 1px solid var(--gray-300);
-    border-left: none;
-    appearance: none;
-    border-radius: 0 var(--doctor-rounded) var(--doctor-rounded) 0;
-    transition: var(--doctor-transition);
-  }
-  
-  .form-control:focus {
-    z-index: 3;
-    border-color: var(--primary-300);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
-    outline: none;
-  }
-  
-  .password-toggle {
-    border-radius: 0 var(--doctor-rounded) var(--doctor-rounded) 0;
-    border-left: none;
-  }
-  
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: var(--doctor-rounded);
-    transition: var(--doctor-transition);
-    cursor: pointer;
-  }
-  
-  .btn-primary {
-    color: white;
-    background-color: var(--primary-600);
-    border: 1px solid var(--primary-600);
-  }
-  
-  .btn-primary:hover {
-    background-color: var(--primary-700);
-    border-color: var(--primary-700);
-    transform: translateY(-1px);
-  }
-  
-  .btn-outline-secondary {
-    color: var(--gray-700);
-    background-color: white;
-    border: 1px solid var(--gray-300);
-  }
-  
-  .btn-outline-secondary:hover {
-    background-color: var(--gray-50);
-    border-color: var(--gray-400);
-  }
-  
-  .btn-lg {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-  }
-  
-  .doctor-benefits {
-    display: grid;
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-  
-  .benefit-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1rem;
-    border-radius: var(--doctor-rounded);
-    background-color: white;
-    box-shadow: var(--doctor-shadow);
-    transition: var(--doctor-transition);
-  }
-  
-  .benefit-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  }
-  
-  .benefit-icon-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: var(--doctor-rounded);
-    flex-shrink: 0;
-  }
-  
-  .bg-blue-50 { background-color: var(--blue-50); }
-  .bg-green-50 { background-color: var(--green-50); }
-  .bg-purple-50 { background-color: var(--purple-50); }
-  
-  .text-blue-600 { color: var(--blue-600); }
-  .text-green-600 { color: var(--green-600); }
-  .text-purple-600 { color: var(--purple-600); }
-  
-  .benefit-text h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-    color: var(--gray-900);
-  }
-  
-  .benefit-text p {
-    font-size: 0.875rem;
-    color: var(--gray-500);
-    margin-bottom: 0;
-    line-height: 1.5;
-  }
-  
-  .text-sm { font-size: 0.875rem; }
-  .text-primary-600 { color: var(--primary-600); }
-  .hover\:text-primary-800:hover { color: var(--primary-800); }
-  .text-gray-600 { color: var(--gray-600); }
-  .font-medium { font-weight: 500; }
-  
-  /* Анімації */
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .doctor-login-card {
-    animation: fadeInUp 0.6s ease-out forwards;
-  }
-  
-  .benefit-card:nth-child(1) { animation: fadeInUp 0.6s ease-out 0.1s forwards; opacity: 0; }
-  .benefit-card:nth-child(2) { animation: fadeInUp 0.6s ease-out 0.2s forwards; opacity: 0; }
-  .benefit-card:nth-child(3) { animation: fadeInUp 0.6s ease-out 0.3s forwards; opacity: 0; }
-  
-  /* Адаптація для мобільних */
-  @media (max-width: 991.98px) {
-    .doctor-login-page {
-      padding-top: 2rem;
-      padding-bottom: 2rem;
-    }
-    
-    .doctor-content-wrapper {
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-    
-    .doctor-benefits {
-      justify-content: center;
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .benefit-card {
-      text-align: left;
-    }
-  }
-  
-  @media (max-width: 575.98px) {
-    .card-body {
-      padding: 1.25rem;
-    }
-  }
-</style>
-
 <script>
-  // Перемикання видимості пароля
-  document.querySelectorAll('.password-toggle').forEach(button => {
-    button.addEventListener('click', function() {
-      const passwordInput = this.closest('.input-group').querySelector('input');
-      const icon = this.querySelector('i');
-      
-      if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        icon.classList.replace('fa-eye', 'fa-eye-slash');
-        this.setAttribute('aria-label', 'Приховати пароль');
-      } else {
-        passwordInput.type = 'password';
-        icon.classList.replace('fa-eye-slash', 'fa-eye');
-        this.setAttribute('aria-label', 'Показати пароль');
-      }
-    });
-  });
+  document.addEventListener('turbo:load', function () {
+    document.querySelectorAll('.password-toggle').forEach(button => {
+      button.addEventListener('click', function () {
+        const input = this.closest('.relative').querySelector('input');
+        const icon = this.querySelector('i');
 
-  // Маска для телефону
-  const phoneInput = document.getElementById('doctorPhone');
-  if (phoneInput) {
-    phoneInput.addEventListener('input', function(e) {
-      let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-      e.target.value = !x[2] ? x[1] : x[1] + ' ' + x[2] + (x[3] ? ' ' + x[3] : '');
+        if (input.type === 'password') {
+          input.type = 'text';
+          icon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+          input.type = 'password';
+          icon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+      });
     });
-  }
+
+    const form = document.querySelector('form');
+    const phoneInput = document.getElementById('doctorPhone');
+    if (form && phoneInput) {
+      form.addEventListener('submit', function (e) {
+        const digits = phoneInput.value.replace(/\D/g, '');
+        if (digits.length === 9) {
+          phoneInput.value = '+380' + digits;
+        } else if (digits.length === 12 && digits.startsWith('380')) {
+          phoneInput.value = '+' + digits;
+        } else {
+          e.preventDefault();
+          alert('Введіть 9 цифр після +380');
+          phoneInput.focus();
+        }
+      });
+    }
+  });
 </script>

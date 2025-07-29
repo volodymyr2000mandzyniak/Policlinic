@@ -32,14 +32,17 @@
 
     <div class="form-group">
       <%= f.label :phone, "Телефон*" %>
-      <%= f.telephone_field :phone, required: true, class: "form-control", pattern: "[0-9]{10}" %>
-      <small class="form-text text-muted">Формат: 0671234567</small>
+      <div class="input-group">
+        <span class="input-group-text">+380</span>
+        <%= f.text_field :phone, required: true, class: "form-control", placeholder: "961234567", id: "doctor_phone", inputmode: "tel", maxlength: 9 %>
+      </div>
+      <small class="form-text text-muted">Введіть 9 цифр після +380</small>
     </div>
 
     <div class="form-group">
       <%= f.label :category_id, "Спеціальність*" %>
-      <%= f.collection_select :category_id, Category.all, :id, :title, 
-                            { prompt: "Оберіть вашу спеціальність" }, 
+      <%= f.collection_select :category_id, Category.all, :id, :title,
+                            { prompt: "Оберіть вашу спеціальність" },
                             { class: "form-control", required: true } %>
     </div>
 
@@ -75,11 +78,9 @@
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
-
 .form-group {
   margin-bottom: 1.5rem;
 }
-
 .form-control {
   display: block;
   width: 100%;
@@ -88,23 +89,49 @@
   line-height: 1.5;
   color: #495057;
   background-color: #fff;
-  background-clip: padding-box;
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-
-.form-check-input {
-  margin-top: 0.3rem;
+.input-group-text {
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.25rem 0 0 0.25rem;
 }
-
+.input-group .form-control {
+  border-radius: 0 0.25rem 0.25rem 0;
+}
 .btn-block {
   display: block;
   width: 100%;
 }
-
 .shared-links {
   margin-top: 1.5rem;
   text-align: center;
 }
 </style>
+
+<script>
+document.addEventListener('turbo:load', function () {
+  const form = document.querySelector('.registration-form form');
+  const phoneInput = document.getElementById('doctor_phone');
+
+  if (form && phoneInput) {
+    form.addEventListener('submit', function (e) {
+      let raw = phoneInput.value.trim().replace(/\D/g, '');
+
+      if (raw.length === 9) {
+        phoneInput.value = '+380' + raw;
+      } else if (raw.length === 12 && raw.startsWith('380')) {
+        phoneInput.value = '+' + raw;
+      } else if (raw.length === 13 && raw.startsWith('380')) {
+        // вже правильний формат
+      } else {
+        e.preventDefault();
+        alert('Введіть коректний номер (9 цифр після +380)');
+        phoneInput.focus();
+      }
+    });
+  }
+});
+</script>

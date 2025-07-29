@@ -1,46 +1,49 @@
 <div class="patient-registration">
-  <h2 class="text-center">Реєстрація пацієнта</h2>
+  <h2 class="text-center mb-4">Реєстрація пацієнта</h2>
 
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "registration-form" }) do |f| %>
     <%= render "patients/shared/error_messages", resource: resource %>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
       <%= f.label :email, "Електронна пошта*" %>
-      <%= f.email_field :email, class: "form-control", autofocus: true, autocomplete: "email", required: true %>
+      <%= f.email_field :email, class: "form-control", required: true, autocomplete: "email" %>
     </div>
 
     <div class="row">
       <div class="col-md-6">
-        <div class="form-group">
+        <div class="form-group mb-3">
           <%= f.label :first_name, "Ім'я*" %>
           <%= f.text_field :first_name, class: "form-control", required: true %>
         </div>
       </div>
       <div class="col-md-6">
-        <div class="form-group">
+        <div class="form-group mb-3">
           <%= f.label :last_name, "Прізвище*" %>
           <%= f.text_field :last_name, class: "form-control", required: true %>
         </div>
       </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
       <%= f.label :date_of_birth, "Дата народження*" %>
       <%= f.date_field :date_of_birth, class: "form-control", required: true, max: Date.today - 12.years %>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
       <%= f.label :phone, "Телефон*" %>
-      <%= f.telephone_field :phone, class: "form-control", required: true, pattern: "[0-9]{10}" %>
-      <small class="form-text text-muted">Формат: 0671234567</small>
+      <div class="input-group">
+        <span class="input-group-text">+380</span>
+        <%= f.telephone_field :phone, class: "form-control", id: "reg_phone", placeholder: "000000000", required: true, maxlength: 9, inputmode: "tel" %>
+      </div>
+      <small class="form-text text-muted">Введіть 9 цифр після +380</small>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
       <%= f.label :address, "Адреса*" %>
       <%= f.text_field :address, class: "form-control", required: true %>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
       <%= f.label :password, "Пароль*" %>
       <% if @minimum_password_length %>
         <small class="form-text text-muted">(мінімум <%= @minimum_password_length %> символів)</small>
@@ -48,17 +51,40 @@
       <%= f.password_field :password, class: "form-control", autocomplete: "new-password", required: true %>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-4">
       <%= f.label :password_confirmation, "Підтвердження пароля*" %>
       <%= f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password", required: true %>
     </div>
 
-    <div class="actions">
-      <%= f.submit "Зареєструватися", class: "btn btn-primary btn-block" %>
+    <div class="actions mb-4">
+      <%= f.submit "Зареєструватися", class: "btn btn-primary btn-block w-100" %>
     </div>
   <% end %>
 
-  <div class="shared-links">
+  <div class="shared-links text-center">
     <%= render "patients/shared/links" %>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('.registration-form');
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        const phoneField = document.getElementById('reg_phone');
+        if (phoneField) {
+          let digits = phoneField.value.replace(/\D/g, '');
+
+          if (digits.length === 9) {
+            phoneField.value = '+380' + digits;
+          } else {
+            e.preventDefault();
+            alert('Будь ласка, введіть 9 цифр номера після +380');
+            phoneField.focus();
+            return false;
+          }
+        }
+      });
+    }
+  });
+</script>
