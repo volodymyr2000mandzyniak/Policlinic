@@ -12,6 +12,7 @@ gem "bootsnap", require: false
 gem 'rake'
 
 gem 'nokogiri', '< 1.16.0'
+gem 'ffi', '< 1.17.0'
 
 # Frontend
 gem "importmap-rails"
