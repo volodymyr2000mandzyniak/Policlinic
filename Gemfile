@@ -9,6 +9,7 @@ gem "rails", "~> 7.2.2", ">= 7.2.2.1"
 gem "sprockets-rails"
 gem "puma", ">= 5.0"
 gem "bootsnap", require: false
+gem 'rake'
 
 # Frontend
 gem "importmap-rails"
