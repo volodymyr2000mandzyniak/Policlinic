@@ -93,11 +93,16 @@ puts "✅ Пацієнти створені успішно!"
 # puts "✅ Записи на прийом створені успішно!"
 
 # Створення адміністратора
-AdminUser.find_or_create_by!(email: 'admin@example.com') do |admin|
-  admin.password = 'password'
-  admin.password_confirmation = 'password'
+admin_email = ENV.fetch('ADMIN_EMAIL', 'admin@example.com')
+admin_password = ENV.fetch('ADMIN_PASSWORD', 'password')
+
+AdminUser.find_or_create_by!(email: admin_email) do |admin|
+  admin.password = admin_password
+  admin.password_confirmation = admin_password
 end
-puts "✅ Адміністратор створений (admin@example.com / password)"
+
+puts "✅ Адміністратор створений (#{admin_email} / #{admin_password})"
+
 
 
 puts "🎉 Базу даних успішно заповнено тестовими даними!"
