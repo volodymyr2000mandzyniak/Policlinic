@@ -11,6 +11,8 @@ gem "puma", ">= 5.0"
 gem "bootsnap", require: false
 gem 'rake'
 
+gem 'nokogiri', '~> 1.18.9', platforms: :ruby
+
 # Frontend
 gem "importmap-rails"
 gem "turbo-rails"
