@@ -32,7 +32,7 @@ Category.find_each do |category|
   rand(2..4).times do
     Doctor.create!(
       email: Faker::Internet.unique.email,
-      phone: Faker::PhoneNumber.unique.cell_phone_in_e164.gsub(/\D/, '').first(12),
+      phone: "+380#{rand(50..99)}#{rand(1_000_000..9_999_999)}", # Формат +380XXXXXXXXX
       password: "password123",
       password_confirmation: "password123",
       first_name: Faker::Name.first_name,
@@ -51,10 +51,10 @@ puts "✅ Лікарі створені успішно!"
 # Створення пацієнтів
 puts "Створюємо пацієнтів..."
 
-10.times do
+10.times do |n|
   Patient.create!(
     email: Faker::Internet.unique.email,
-    phone: Faker::PhoneNumber.unique.cell_phone_in_e164.gsub(/\D/, '').first(12),
+    phone: "+38050#{1000000 + n}", # Унікальні номери у форматі +38050XXXXXXX
     password: "password123",
     password_confirmation: "password123",
     first_name: Faker::Name.first_name,
