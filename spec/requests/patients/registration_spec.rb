@@ -10,7 +10,7 @@ RSpec.describe "Patient registration", type: :request do
             first_name: "Test",
             last_name: "Patient",
             date_of_birth: "1990-01-01",
-            phone: "0501234567",
+          phone: "+380501234567",
             password: "password123",
             password_confirmation: "password123",
             address: "Kyiv"

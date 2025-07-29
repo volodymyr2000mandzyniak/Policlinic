@@ -1,4 +1,6 @@
 class Doctor < ApplicationRecord
+  include PhoneValidatable
+
   devise :database_authenticatable, :registerable,
         :recoverable, :rememberable, :validatable, authentication_keys: [:phone]
 

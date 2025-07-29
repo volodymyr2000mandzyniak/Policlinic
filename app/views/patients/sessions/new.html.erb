@@ -44,60 +44,49 @@
         </div>
       </div>
       
-      <div class="col-md-10 mx-auto col-lg-5">
-        <div class="patient-login-form">
-          <div class="form-header">
-            <h2 class="form-title">Увійти в особистий кабінет</h2>
-            <p class="form-subtitle">Введіть ваші облікові дані</p>
-          </div>
-          
-          <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-            <div class="form-floating mb-3">
-              <%= f.text_field :phone, autofocus: true, class: "form-control", id: "phone", placeholder: "096 1234567", inputmode: "tel" %>
-              <label for="phone">Номер телефону</label>
-            </div>
-            
-            <div class="form-floating mb-3">
-              <%= f.password_field :password, class: "form-control", id: "password", placeholder: "Пароль", autocomplete: "current-password" %>
-              <label for="password">Пароль</label>
-              <button type="button" class="password-toggle" aria-label="Показати пароль">
-                <i class="fas fa-eye" aria-hidden="true"></i>
-              </button>
-            </div>
-            
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <% if devise_mapping.rememberable? %>
-                <div class="form-check">
-                  <%= f.check_box :remember_me, class: "form-check-input", id: "remember_me" %>
-                  <label class="form-check-label" for="remember_me">Запам'ятати мене</label>
-                </div>
-              <% end %>
-              
-              <%= link_to "Забули пароль?", new_password_path(resource_name), class: "forgot-password" %>
-            </div>
-            
-            <%= f.button "Увійти", class: "w-100 btn patient-login-btn", type: "submit" %>
-            
-            <div class="social-login mt-4">
-              <p class="divider-text">або увійдіть через</p>
-              <div class="social-buttons">
-                <button type="button" class="social-btn google-btn">
-                  <i class="fab fa-google" aria-hidden="true"></i>
-                  Google
-                </button>
-                <button type="button" class="social-btn facebook-btn">
-                  <i class="fab fa-facebook-f" aria-hidden="true"></i>
-                  Facebook
-                </button>
-              </div>
-            </div>
-            
-            <div class="alternative-options mt-3">
-              <p class="text-center">Ще не зареєстровані? <%= link_to "Створити акаунт", new_registration_path(resource_name), class: "register-link" %></p>
-            </div>
-          <% end %>
-        </div>
+  <div class="col-md-10 mx-auto col-lg-5">
+  <div class="patient-login-form">
+    <div class="form-header">
+      <h2 class="form-title">Увійти в особистий кабінет</h2>
+      <p class="form-subtitle">Введіть ваші облікові дані</p>
+    </div>
+
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <div class="mb-3">
+    <label class="form-label" for="phone">Номер телефону</label>
+    <div class="input-group">
+      <span class="input-group-text">+380</span>
+      <%= f.text_field :phone, autofocus: true, class: "form-control", id: "phone", placeholder: "000000000", inputmode: "tel", maxlength: 9 %>
+    </div>
+  </div>
+
+  <div class="form-floating mb-3 position-relative">
+    <%= f.password_field :password, class: "form-control", id: "password", placeholder: "Пароль", autocomplete: "current-password" %>
+    <label for="password">Пароль</label>
+    <button type="button" class="password-toggle" aria-label="Показати пароль">
+      <i class="fas fa-eye" aria-hidden="true"></i>
+    </button>
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <% if devise_mapping.rememberable? %>
+      <div class="form-check">
+        <%= f.check_box :remember_me, class: "form-check-input", id: "remember_me" %>
+        <label class="form-check-label" for="remember_me">Запам'ятати мене</label>
       </div>
+    <% end %>
+
+    <%= link_to "Забули пароль?", new_password_path(resource_name), class: "forgot-password" %>
+  </div>
+
+  <%= f.button "Увійти", class: "w-100 btn patient-login-btn", type: "submit" %>
+
+  <div class="alternative-options mt-3">
+    <p class="text-center">Ще не зареєстровані? <%= link_to "Створити акаунт", new_registration_path(resource_name), class: "register-link" %></p>
+  </div>
+<% end %>
+
+
     </div>
   </div>
 </div>
@@ -444,47 +433,25 @@
 </style>
 
 <script>
-  document.querySelectorAll('.password-toggle').forEach(button => {
-    button.addEventListener('click', function() {
-      const passwordInput = this.closest('.form-floating').querySelector('input');
-      const icon = this.querySelector('i');
-      
-      if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        icon.classList.replace('fa-eye', 'fa-eye-slash');
-        this.setAttribute('aria-label', 'Приховати пароль');
-      } else {
-        passwordInput.type = 'password';
-        icon.classList.replace('fa-eye-slash', 'fa-eye');
-        this.setAttribute('aria-label', 'Показати пароль');
-      }
-    });
-  });
-  
-  const phoneInput = document.getElementById('phone');
-  if (phoneInput) {
-    phoneInput.addEventListener('input', function(e) {
-      let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-      e.target.value = !x[2] ? x[1] : x[1] + ' ' + x[2] + (x[3] ? ' ' + x[3] : '');
-    });
-  }
+  document.addEventListener('turbo:load', function () {
+    const form = document.querySelector('.patient-login-form form');
+    const phoneInput = document.getElementById('phone');
 
-  document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form');
-    if (form) {
-      form.addEventListener('submit', function(e) {
-        const phoneField = document.getElementById('phone');
-        if (phoneField) {
-          phoneField.value = phoneField.value.replace(/\D/g, '');
-          
-          if (phoneField.value.length < 10) {
-            e.preventDefault();
-            alert('Будь ласка, введіть коректний номер телефону (не менше 10 цифр)');
-            phoneField.focus();
-            return false;
-          }
+    if (form && phoneInput) {
+      form.addEventListener('submit', function (e) {
+        let raw = phoneInput.value.trim().replace(/\D/g, '');
+
+        if (raw.length === 9) {
+          phoneInput.value = '+380' + raw;
+        } else if (raw.length === 12 && raw.startsWith('380')) {
+          phoneInput.value = '+' + raw;
+        } else if (raw.length === 13 && raw.startsWith('380')) {
+          // already formatted correctly
+        } else {
+          e.preventDefault();
+          alert('Введіть коректний номер (9 цифр після +380)');
+          phoneInput.focus();
         }
-        return true;
       });
     }
   });

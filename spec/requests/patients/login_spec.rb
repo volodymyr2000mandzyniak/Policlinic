@@ -2,7 +2,7 @@
 require 'rails_helper'
 
 RSpec.describe "Patient login", type: :request do
-  let(:patient) { create(:patient, phone: "0501234567", password: "password123") }
+  let(:patient) { create(:patient, phone: "+380501234567", password: "password123") }
 
   it "logs in the patient" do
     post patient_session_path, params: {
