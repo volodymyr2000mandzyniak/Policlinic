@@ -11,6 +11,8 @@ gem "puma", ">= 5.0"
 gem "bootsnap", require: false
 gem 'rake'
 
+gem 'rubygems-update', '3.3.22'
+
 # Frontend
 gem "importmap-rails"
 gem "turbo-rails"

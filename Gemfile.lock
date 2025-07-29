@@ -391,6 +391,7 @@ GEM
       ffi (~> 1.12)
       logger
     ruby2_keywords (0.0.5)
+    rubygems-update (3.3.22)
     rubyzip (2.4.1)
     sassc (2.4.0)
       ffi (~> 1.9)
@@ -499,6 +500,7 @@ DEPENDENCIES
   rake
   rspec-rails (~> 6.1)
   rubocop-rails-omakase
+  rubygems-update (= 3.3.22)
   sassc-rails
   selenium-webdriver
   shoulda-matchers (~> 6.0)
