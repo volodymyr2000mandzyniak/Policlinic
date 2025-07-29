@@ -154,11 +154,14 @@ GEM
       railties (>= 6.1.0)
     faker (3.5.1)
       i18n (>= 1.8.11, < 2)
+    ffi (1.17.2)
     ffi (1.17.2-aarch64-linux-gnu)
     ffi (1.17.2-aarch64-linux-musl)
     ffi (1.17.2-arm-linux-gnu)
     ffi (1.17.2-arm-linux-musl)
     ffi (1.17.2-arm64-darwin)
+    ffi (1.17.2-x86-linux-gnu)
+    ffi (1.17.2-x86-linux-musl)
     ffi (1.17.2-x86_64-darwin)
     ffi (1.17.2-x86_64-linux-gnu)
     ffi (1.17.2-x86_64-linux-musl)
@@ -226,6 +229,7 @@ GEM
     mini_magick (5.3.0)
       logger
     mini_mime (1.1.5)
+    mini_portile2 (2.8.9)
     minitest (5.25.5)
     msgpack (1.8.0)
     net-imap (0.5.9)
@@ -238,6 +242,9 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.4)
+    nokogiri (1.18.9)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
     nokogiri (1.18.9-aarch64-linux-gnu)
       racc (~> 1.4)
     nokogiri (1.18.9-aarch64-linux-musl)
@@ -384,6 +391,7 @@ GEM
       ffi (~> 1.12)
       logger
     ruby2_keywords (0.0.5)
+    rubygems-update (3.3.22)
     rubyzip (2.4.1)
     sassc (2.4.0)
       ffi (~> 1.9)
@@ -459,6 +467,9 @@ PLATFORMS
   arm-linux-gnu
   arm-linux-musl
   arm64-darwin
+  ruby
+  x86-linux-gnu
+  x86-linux-musl
   x86_64-darwin
   x86_64-linux
   x86_64-linux-gnu
@@ -481,13 +492,16 @@ DEPENDENCIES
   image_processing
   importmap-rails
   jbuilder
+  nokogiri (~> 1.14)
   pg (~> 1.1)
   puma (>= 5.0)
   rails (~> 7.2.2, >= 7.2.2.1)
   rails-controller-testing
   rails_12factor
+  rake
   rspec-rails (~> 6.1)
   rubocop-rails-omakase
+  rubygems-update (= 3.3.22)
   sassc-rails
   selenium-webdriver
   shoulda-matchers (~> 6.0)
@@ -504,4 +518,4 @@ RUBY VERSION
    ruby 3.1.2p20
 
 BUNDLED WITH
-   2.6.8
+   2.6.9

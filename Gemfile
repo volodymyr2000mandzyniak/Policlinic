@@ -9,6 +9,11 @@ gem "rails", "~> 7.2.2", ">= 7.2.2.1"
 gem "sprockets-rails"
 gem "puma", ">= 5.0"
 gem "bootsnap", require: false
+gem 'rake'
+
+gem 'rubygems-update', '3.3.22'
+gem 'nokogiri', '~> 1.14'
+
 
 # Frontend
 gem "importmap-rails"
