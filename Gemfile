@@ -33,6 +33,8 @@ gem "image_processing"
 # Platform-specific gems
 gem "tzinfo-data", platforms: %i[windows jruby]
 
+gem "faker"
+
 # Development and test environment
 group :development, :test do
   # Environment management
@@ -49,7 +51,6 @@ group :development, :test do
   gem "rspec-rails", "~> 6.1"
   gem "rails-controller-testing"
   gem "factory_bot_rails"
-  gem "faker"
 end
 
 # Development-only gems
