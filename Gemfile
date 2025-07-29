@@ -11,7 +11,7 @@ gem "puma", ">= 5.0"
 gem "bootsnap", require: false
 gem 'rake'
 
-gem 'nokogiri', '~> 1.18.9', platforms: :ruby
+gem 'nokogiri', '< 1.16.0'
 
 # Frontend
 gem "importmap-rails"
