@@ -4,10 +4,10 @@ class DoctorsController < ApplicationController
   def index
     @categories = Category.all
     @doctors = if params[:category_id].present?
-                Doctor.where(category_id: params[:category_id]).approved
-    else
-                Doctor.approved
-    end
+                  Doctor.where(category_id: params[:category_id]).approved
+                else
+                  Doctor.approved
+                end
   end
 
   def show

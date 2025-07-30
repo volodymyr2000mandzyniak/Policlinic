@@ -6,8 +6,6 @@
     
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "edit-profile-form", multipart: true }) do |f| %>
       <%= render "doctors/shared/error_messages", resource: resource %>
-      
-      <!-- Секція фото профілю -->
       <div class="form-section">
         <h3><i class="fas fa-camera"></i> Фото профілю</h3>
         
@@ -28,7 +26,6 @@
         </div>
       </div>
       
-      <!-- Решта форми -->
       <div class="form-section">
         <h3><i class="fas fa-id-card"></i> Особисті дані</h3>
         
@@ -183,7 +180,6 @@
     gap: 10px;
   }
   
-  /* Стилі для аватара */
   .avatar-edit-container {
     display: flex;
     align-items: center;
@@ -212,7 +208,6 @@
     border: 3px solid #e3f2fd;
   }
   
-  /* Решта стилів */
   .form-row {
     display: flex;
     gap: 20px;

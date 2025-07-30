@@ -1,12 +1,10 @@
 <div class="doctor-profile">
-  <!-- Header -->
   <header class="profile-header">
     <div class="header-content">
       <h1 class="profile-title">
         <i class="fas fa-user-md"></i>
         Профіль лікаря
       </h1>
-      <!-- Appointment Button for Patients -->
       <% if patient_signed_in? && @doctor.approved? %>
         <% if @doctor.can_accept_new_appointment? %>
           <%= form_with model: Appointment.new, url: appointments_path, method: :post, local: true, class: "appointment-form" do |f| %>
@@ -24,12 +22,9 @@
     </div>
   </header>
 
-  <!-- Main Profile Content -->
   <main class="profile-content">
-    <!-- Sidebar with Photo and Buttons -->
     <aside class="profile-sidebar">
       <div class="avatar-section">
-        <!-- Doctor Avatar -->
         <div class="doctor-avatar-container">
           <% if @doctor.photo.attached? %>
             <%= image_tag @doctor.photo, class: "doctor-avatar", alt: "Фото профілю #{@doctor.full_name}" %>
@@ -38,7 +33,6 @@
               <i class="fas fa-user-md"></i>
             </div>
           <% end %>
-          <!-- Photo Upload Form -->
           <% if doctor_signed_in? && current_doctor == @doctor %>
             <%= form_with model: @doctor, url: update_photo_doctor_path(@doctor), method: :patch, local: true, class: "avatar-form" do |f| %>
               <%= f.file_field :photo, class: "d-none", id: "avatar-upload" %>
@@ -48,13 +42,11 @@
             <% end %>
           <% end %>
         </div>
-        <!-- Profile Status -->
         <% if doctor_signed_in? && current_doctor == @doctor %>
           <div class="profile-status <%= @doctor.approved? ? 'approved' : 'pending' %>">
             <i class="fas fa-<%= @doctor.approved? ? 'check-circle' : 'clock' %>"></i>
             <%= @doctor.approved? ? 'Профіль підтверджено' : 'Заявка на розгляді' %>
           </div>
-          <!-- Action Buttons -->
           <div class="profile-actions">
             <%= link_to edit_doctor_registration_path, class: "btn btn-edit" do %>
               <i class="fas fa-edit"></i> Редагувати профіль
@@ -67,9 +59,7 @@
       </div>
     </aside>
 
-    <!-- Main Doctor Information -->
     <article class="profile-details">
-      <!-- Personal Information -->
       <section class="info-section">
         <h2 class="section-title">
           <i class="fas fa-id-card"></i>
@@ -88,7 +78,6 @@
           <% end %>
         </div>
       </section>
-      <!-- Contact Information -->
       <section class="info-section">
         <h2 class="section-title">
           <i class="fas fa-address-book"></i>
@@ -120,7 +109,6 @@
     </article>
   </main>
 
-  <!-- Appointments Section (for Doctor only) -->
   <% if doctor_signed_in? && current_doctor == @doctor %>
     <section class="appointments-section">
       <div class="section-header">
@@ -188,7 +176,6 @@
 </div>
 
 <style>
-  /* Main Container */
   .doctor-profile {
     max-width: 1200px;
     margin: 0 auto;
@@ -197,7 +184,6 @@
     color: #333;
   }
 
-  /* Profile Header */
   .profile-header {
     background: linear-gradient(135deg, #1976d2, #0d47a1);
     color: white;
@@ -222,7 +208,6 @@
     gap: 10px;
   }
 
-  /* Main Content */
   .profile-content {
     display: flex;
     gap: 30px;
@@ -238,7 +223,6 @@
     gap: 20px;
   }
 
-  /* Doctor Avatar */
   .doctor-avatar-container {
     display: flex;
     flex-direction: column;
@@ -270,7 +254,6 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   }
 
-  /* Buttons */
   .btn {
     padding: 10px 15px;
     border-radius: 5px;
@@ -326,7 +309,6 @@
     display: none;
   }
 
-  /* Profile Status */
   .profile-status {
     padding: 10px 15px;
     border-radius: 5px;
@@ -348,7 +330,6 @@
     color: #ff8f00;
   }
 
-  /* Information Sections */
   .profile-details {
     flex: 1;
     min-width: 300px;
@@ -394,7 +375,6 @@
     font-size: 16px;
   }
 
-  /* Appointments Section */
   .appointments-section {
     background: white;
     border-radius: 8px;
@@ -425,7 +405,6 @@
     color: white;
   }
 
-  /* Appointments Table */
   .appointments-table {
     width: 100%;
     overflow-x: auto;
@@ -494,7 +473,6 @@
     padding: 5px;
   }
 
-  /* Empty State */
   .empty-state {
     display: flex;
     flex-direction: column;
@@ -511,7 +489,6 @@
     color: #e0e0e0;
   }
 
-  /* Alerts */
   .alert {
     padding: 10px 15px;
     border-radius: 4px;
@@ -526,7 +503,6 @@
     color: #856404;
   }
 
-  /* Responsive Design */
   @media (max-width: 992px) {
     .profile-content {
       flex-direction: column;

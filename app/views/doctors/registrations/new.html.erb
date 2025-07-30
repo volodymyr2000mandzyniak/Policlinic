@@ -125,7 +125,6 @@ document.addEventListener('turbo:load', function () {
       } else if (raw.length === 12 && raw.startsWith('380')) {
         phoneInput.value = '+' + raw;
       } else if (raw.length === 13 && raw.startsWith('380')) {
-        // вже правильний формат
       } else {
         e.preventDefault();
         alert('Введіть коректний номер (9 цифр після +380)');

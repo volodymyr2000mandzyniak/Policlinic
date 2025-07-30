@@ -10,8 +10,6 @@ class Patient < ApplicationRecord
   has_many :doctors, through: :appointments
   has_one_attached :photo
 
-
-
   def email_required?; false; end
   def email_changed?; false; end
 

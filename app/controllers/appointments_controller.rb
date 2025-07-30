@@ -1,13 +1,9 @@
 class AppointmentsController < ApplicationController
-  # Автоматично завантажує і авторизує ресурс для екшенів, окрім вказаних
   load_and_authorize_resource except: [:closed, :my_open, :my_closed]
-
   before_action :authorize_appointment!, only: [:update]
 
   def create
-    # Захищаємося: дозволяємо лише до активних лікарів
     doctor = Doctor.approved.find_by(id: appointment_params[:doctor_id])
-
     unless doctor
       redirect_to root_path, alert: "Обраного лікаря не існує або він неактивний"
       return
@@ -35,7 +31,6 @@ class AppointmentsController < ApplicationController
   end
 
   def update
-    # статус змінюється на closed, додається рекомендація
     if @appointment.update(appointment_params.merge(status: 'closed'))
       redirect_to appointments_path, notice: "Рекомендація надана, запис закрито"
     else
