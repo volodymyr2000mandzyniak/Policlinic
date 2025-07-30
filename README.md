@@ -10,8 +10,8 @@ https://softgeneration-b9a1bfa3cdb2.herokuapp.com
 
 ## 1. Посилання на адмін панель
 https://softgeneration-b9a1bfa3cdb2.herokuapp.com/admin
-Email = admin@clinic.dev 
-PASSWORD = supersecret
+# Email = admin@clinic.dev 
+# PASSWORD = supersecret
 
 ## 1. Загальний опис
 
