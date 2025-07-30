@@ -7,7 +7,6 @@ Rails.application.routes.draw do
   devise_for :doctors
   devise_for :patients
 
-  # Custom routes for patients and doctors
   [:patients, :doctors].each do |resource|
     resources resource, only: resource == :patients ? [:index, :show] : [:index, :show, :edit, :update, :destroy] do
       member do
