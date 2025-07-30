@@ -10,7 +10,7 @@ gem "puma", ">= 5.0"
 gem "bootsnap", require: false
 gem "rake"
 
-gem "nokogiri", "< 1.16.0"
+gem "nokogiri", "< 1.19.0"
 gem "ffi", "< 1.17.0"
 
 gem "importmap-rails"
