@@ -4,16 +4,11 @@
 ![Rails Version](https://img.shields.io/badge/Rails-7.0-blue)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13+-blueviolet)
 
-```bash
-# 1. Клонування
-git clone https://github.com/yourusername/polyclinic.git
-cd polyclinic
 
 ## 1. Посилання на додаток
 https://softgeneration-b9a1bfa3cdb2.herokuapp.com
 
-
-## 1. Посилання на додат
+## 1. Посилання на адмін панель
 https://softgeneration-b9a1bfa3cdb2.herokuapp.com/admin
 Email = admin@clinic.dev 
 PASSWORD = supersecret
@@ -23,7 +18,6 @@ PASSWORD = supersecret
 Додаток надає можливість:
 
 ### Для пацієнтів
-
 ✅ Реєстрація та вхід у свій профайл за номером телефону
 ✅ Записуватися до лікарів  
 ✅ Переглядати рекомендації  
@@ -32,7 +26,8 @@ PASSWORD = supersecret
 ### Для лікарів
 ✅ Керувати записами пацієнтів  
 ✅ Залишати рекомендації  
-✅ Переглядати свій розклад  
+✅ Переглядати свій розклад 
+✅ Після реєстрації ваш статус буде на розгляді адміністратора і тільки після підтвердження ви зможете отримувати запис а та відображатись на загальні стоірці  
 
 ### Для адміністраторів
 ✅ Керувати лікарями та категоріями  
@@ -59,8 +54,12 @@ PASSWORD = supersecret
 - Деплой на AWS/Heroku
 
 ## Встановлення
-
-1. Встановіть залежності:
 ```bash
-bundle install
-yarn install
+
+1. Клонуйте репозиторій: git clone https://github.com/yourusername/polyclinic.git
+2. Перейдіть у католог: cd polyclinic
+3. виконайте командуbundle install
+4. Створіть базу даних rails db:create
+5. Виконайте міграції: rails db:migrate.
+6. Виконайте Seed: rails db:seed.
+7. Запустіть сервер: rails server.
