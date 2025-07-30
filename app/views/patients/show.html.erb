@@ -7,12 +7,13 @@
     <div class="profile-content">
       <div class="avatar-section">
         <% if @patient.photo.attached? %>
-          <%= image_tag @patient.photo, class: "patient-avatar", alt: "Patient Avatar" %>
+          <%= image_tag @patient.photo, class: "patient-avatar", alt: "Фото профілю #{@patient.full_name}" %>
         <% else %>
-          <%= image_tag "https://randomuser.me/api/portraits/men/#{rand(1..80)}.jpg", class: "patient-avatar", alt: "Patient Avatar" %>
+          <div class="default-avatar">
+            <i class="fas fa-user"></i>
+          </div>
         <% end %>
 
-        <!-- Photo Upload Form -->
         <%= form_with model: @patient, url: update_photo_patient_path(@patient), method: :patch, local: true, class: "avatar-form" do |f| %>
           <%= f.file_field :photo, class: "d-none", id: "avatar-upload" %>
           <%= f.label :photo, for: "avatar-upload", class: "btn edit-btn" do %>
@@ -123,6 +124,19 @@
     border: 5px solid #e3f2fd;
     margin-bottom: 1.5rem;
   }
+.default-avatar {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background-color: #e3f2fd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  color: #1976d2;
+  border: 5px solid #e3f2fd;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
 
   .profile-actions {
     display: flex;
