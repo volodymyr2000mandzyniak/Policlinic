@@ -168,7 +168,16 @@ GEM
       railties (>= 6.1.0)
     faker (3.5.2)
       i18n (>= 1.8.11, < 2)
-    ffi (1.16.3)
+    ffi (1.17.2-aarch64-linux-gnu)
+    ffi (1.17.2-aarch64-linux-musl)
+    ffi (1.17.2-arm-linux-gnu)
+    ffi (1.17.2-arm-linux-musl)
+    ffi (1.17.2-arm64-darwin)
+    ffi (1.17.2-x86-linux-gnu)
+    ffi (1.17.2-x86-linux-musl)
+    ffi (1.17.2-x86_64-darwin)
+    ffi (1.17.2-x86_64-linux-gnu)
+    ffi (1.17.2-x86_64-linux-musl)
     formtastic (5.0.0)
       actionpack (>= 6.0.0)
     formtastic_i18n (0.7.0)
@@ -494,7 +503,7 @@ DEPENDENCIES
   error_highlight (>= 0.4.0)
   factory_bot_rails
   faker
-  ffi (< 1.17.0)
+  ffi (< 1.18.0)
   image_processing
   importmap-rails
   jbuilder
